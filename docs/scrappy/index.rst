@@ -1,10 +1,8 @@
 ****************
-Template package
+SCRAPPY
 ****************
-
-This is the documentation for the affiliated package.
 
 Reference/API
 =============
 
-.. automodapi:: packagename
+.. automodapi:: scrappy
