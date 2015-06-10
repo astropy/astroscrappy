@@ -54,7 +54,7 @@ def median(np.ndarray[np.float32_t, mode='c', cast=True] a, int n):
 
     Notes
     -----
-    Wrapper for PyMedian in laxutils.
+    Wrapper for PyMedian in medutils.
     """
     cdef float * aptr = < float * > np.PyArray_DATA(a)
     cdef float med = 0.0
@@ -89,7 +89,7 @@ def optmed3(np.ndarray[np.float32_t, ndim=1, mode='c', cast=True] a):
 
     Notes
     -----
-    Wrapper for PyOptMed3 in laxutils.
+    Wrapper for PyOptMed3 in medutils.
     """
     cdef float * aptr3 = < float * > np.PyArray_DATA(a)
     cdef float med3 = 0.0
@@ -114,7 +114,7 @@ def optmed5(np.ndarray[np.float32_t, ndim=1, mode='c', cast=True] a):
 
     Notes
     -----
-    Wrapper for PyOptMed5 in laxutils.
+    Wrapper for PyOptMed5 in medutils.
     """
     cdef float * aptr5 = < float * > np.PyArray_DATA(a)
     cdef float med5 = 0.0
@@ -139,7 +139,7 @@ def optmed7(np.ndarray[np.float32_t, ndim=1, mode='c', cast=True] a):
 
     Notes
     -----
-    Wrapper for PyOptMed7 in laxutils.
+    Wrapper for PyOptMed7 in medutils.
     """
     cdef float * aptr7 = < float * > np.PyArray_DATA(a)
     cdef float med7 = 0.0
@@ -164,7 +164,7 @@ def optmed9(np.ndarray[np.float32_t, ndim=1, mode='c', cast=True] a):
 
     Notes
     -----
-    Wrapper for PyOptMed9 in laxutils.
+    Wrapper for PyOptMed9 in medutils.
     """
     cdef float * aptr9 = < float * > np.PyArray_DATA(a)
     cdef float med9 = 0.0
@@ -189,7 +189,7 @@ def optmed25(np.ndarray[np.float32_t, ndim=1, mode='c', cast=True] a):
 
     Notes
     -----
-    Wrapper for PyOptMed25 in laxutils.
+    Wrapper for PyOptMed25 in medutils.
     """
     cdef float * aptr25 = < float * > np.PyArray_DATA(a)
     cdef float med25 = 0.0
@@ -216,7 +216,7 @@ def medfilt3(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] d3):
     -----
     The median filter is not calculated for a 1 pixel border around the image.
     These pixel values are copied from the input data. The array needs to be
-    C-contiguous order. Wrapper for PyMedFilt3 in laxutils.
+    C-contiguous order. Wrapper for PyMedFilt3 in medutils.
     """
     cdef int nx = d3.shape[1]
     cdef int ny = d3.shape[0]
@@ -250,7 +250,7 @@ def medfilt5(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] d5):
     -----
     The median filter is not calculated for a 2 pixel border around the image.
     These pixel values are copied from the input data. The array needs to be
-    C-contiguous order. Wrapper for PyMedFilt5 in laxutils.
+    C-contiguous order. Wrapper for PyMedFilt5 in medutils.
     """
     cdef int nx = d5.shape[1]
     cdef int ny = d5.shape[0]
@@ -283,7 +283,7 @@ def medfilt7(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] d7):
     -----
     The median filter is not calculated for a 3 pixel border around the image.
     These pixel values are copied from the input data. The array needs to be
-    C-contiguous order. Wrapper for PyMedFilt7 in laxutils.
+    C-contiguous order. Wrapper for PyMedFilt7 in medutils.
     """
     cdef int nx = d7.shape[1]
     cdef int ny = d7.shape[0]
@@ -320,7 +320,7 @@ def sepmedfilt3(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] dsep3):
     filter but it is approximatly the same, but it is signifcantly faster.
     The median filter is not calculated for a 1 pixel border around the image.
     These pixel values are copied from the input data. The array needs to be
-    C-contiguous order. Wrapper for PySepMedFilt3 in laxutils.
+    C-contiguous order. Wrapper for PySepMedFilt3 in medutils.
     """
     cdef int nx = dsep3.shape[1]
     cdef int ny = dsep3.shape[0]
@@ -357,7 +357,7 @@ def sepmedfilt5(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] dsep5):
     filter but it is approximatly the same, but it is signifcantly faster.
     The median filter is not calculated for a 2 pixel border around the image.
     These pixel values are copied from the input data. The array needs to be
-    C-contiguous order. Wrapper for PySepMedFilt5 in laxutils.
+    C-contiguous order. Wrapper for PySepMedFilt5 in medutils.
     """
     cdef int nx = dsep5.shape[1]
     cdef int ny = dsep5.shape[0]
@@ -395,7 +395,7 @@ def sepmedfilt7(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] dsep7):
     filter but it is approximatly the same, but it is signifcantly faster.
     The median filter is not calculated for a 3 pixel border around the image.
     These pixel values are copied from the input data. The array needs to be
-    C-contiguous order. Wrapper for PySepMedFilt7 in laxutils.
+    C-contiguous order. Wrapper for PySepMedFilt7 in medutils.
     """
     cdef int nx = dsep7.shape[1]
     cdef int ny = dsep7.shape[0]
@@ -432,7 +432,7 @@ def sepmedfilt9(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] dsep9):
     filter but it is approximatly the same, but it is signifcantly faster.
     The median filter is not calculated for a 4 pixel border around the image.
     These pixel values are copied from the input data. The array needs to be
-    C-contiguous order. Wrapper for PySepMedFilt9 in laxutils.
+    C-contiguous order. Wrapper for PySepMedFilt9 in medutils.
     """
 
     cdef int nx = dsep9.shape[1]

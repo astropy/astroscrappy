@@ -7,7 +7,7 @@ import subprocess
 from distutils.core import Extension
 from distutils import log
 
-ROOT_DIR = os.path.relpath(os.path.dirname(__file__))
+UTIL_DIR = os.path.relpath(os.path.dirname(__file__))
 
 CODELINES = """
 import sys
@@ -29,13 +29,13 @@ def check_openmp():
 
 def get_extensions():
 
-    med_sources = [str(os.path.join(ROOT_DIR, "median_utils.pyx")),
-                   str(os.path.join(ROOT_DIR, "medutils.c"))]
+    med_sources = [str(os.path.join(UTIL_DIR, "median_utils.pyx")),
+                   str(os.path.join(UTIL_DIR, "medutils.c"))]
 
-    im_sources = [str(os.path.join(ROOT_DIR, "image_utils.pyx")),
-                  str(os.path.join(ROOT_DIR, "imutils.c"))]
+    im_sources = [str(os.path.join(UTIL_DIR, "image_utils.pyx")),
+                  str(os.path.join(UTIL_DIR, "imutils.c"))]
 
-    include_dirs = ['numpy', ROOT_DIR]
+    include_dirs = ['numpy', UTIL_DIR]
 
     libraries = []
 

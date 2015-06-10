@@ -414,7 +414,7 @@ def updatemask(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] data,
 cdef void clean_meanmask(float[:, ::1] cleanarr, bool[:, ::1] crmask,
                          bool[:, ::1] mask, int nx, int ny,
                          float backgroundlevel):
-    """ clean_meanmask(cleanarr, crmask, mask, nx, ny, backgroundlevel)\n
+    """clean_meanmask(cleanarr, crmask, mask, nx, ny, backgroundlevel)\n
     Clean the bad pixels in cleanarr using a 5x5 masked mean filter.
 
     Parameters
@@ -441,6 +441,7 @@ cdef void clean_meanmask(float[:, ::1] cleanarr, bool[:, ::1] crmask,
         Average value of the background. This value will be used if there are
         no good pixels in a 5x5 region.
     """
+
     # Go through all of the pixels, ignore the borders
     cdef int i, j, k, l, numpix
     cdef float s
@@ -475,11 +476,11 @@ cdef void clean_meanmask(float[:, ::1] cleanarr, bool[:, ::1] crmask,
 
                     cleanarr[j, i] = s
 
-#cdef extern float cymedian(float* a, int n)
+
 cdef void clean_medmask(float[:, ::1] cleanarr, bool[:, ::1] crmask,
                         bool[:, ::1] mask, int nx, int ny,
                         float backgroundlevel):
-    """ clean_medmask(cleanarr, crmask, mask, nx, ny, backgroundlevel)\n
+    """clean_medmask(cleanarr, crmask, mask, nx, ny, backgroundlevel)\n
     Clean the bad pixels in cleanarr using a 5x5 masked median filter.
 
     Parameters

@@ -46,7 +46,7 @@ def subsample(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] dsub):
     -----
     Each pixel is replicated into 4 pixels; no averaging is performed.
     The array needs to be C-contiguous order. Wrapper for PySubsample in
-    laxutils.
+    imutils.
     """
     cdef int nx = dsub.shape[1]
     cdef int ny = dsub.shape[0]
@@ -85,7 +85,7 @@ def rebin(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] drebin):
     -----
     This is effectively the opposite of subsample (although subsample does not
     do an average). The array needs to be C-contiguous order. Wrapper for
-    PyRebin in laxutils.
+    PyRebin in imutils.
     """
     cdef int nx = drebin.shape[1] / 2
     cdef int ny = drebin.shape[0] / 2
@@ -122,7 +122,7 @@ def convolve(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] dconv,
     Notes
     -----
     Both the data and kernel arrays need to be C-contiguous order. Wrapper for
-    PyConvolve in laxutils.
+    PyConvolve in imutils.
     """
     cdef int nx = dconv.shape[1]
     cdef int ny = dconv.shape[0]
@@ -165,7 +165,7 @@ def laplaceconvolve(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] dl):
     Notes
     -----
     The array needs to be C-contiguous order. Wrapper for PyLaplaceConvolve
-    in laxutils.
+    in imutils.
     """
     cdef int nx = dl.shape[1]
     cdef int ny = dl.shape[0]
@@ -205,7 +205,7 @@ def dilate3(np.ndarray[np.uint8_t, ndim=2, mode='c', cast=True] dgrow):
     1 1 1\n
     The binary dilation is not computed for a 1 pixel border around the image.
     These pixels are copied from the input data. The array needs to be
-    C-contiguous order. Wrapper for PyDilate3 in laxutils.
+    C-contiguous order. Wrapper for PyDilate3 in imutils.
     """
     cdef int nx = dgrow.shape[1]
     cdef int ny = dgrow.shape[0]
@@ -251,7 +251,7 @@ def dilate5(np.ndarray[np.uint8_t, ndim=2, mode='c', cast=True] ddilate,
     0 1 1 1 0\n
     The edges are padded with zeros so that the dilation operator is defined
     for all pixels. The array needs to be C-contiguous order. Wrapper for
-    PyDilate5 in laxutils.
+    PyDilate5 in imutils.
     """
     cdef int nx = ddilate.shape[1]
     cdef int ny = ddilate.shape[0]

@@ -1,7 +1,11 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 
-# This sub-module is destined for common non-package specific utility
-# functions that will ultimately be merged into `astropy.utils`
+"""
+Utility functions for Astro-SCRAPPY
+
+These include fast implementations for calculating the median,
+median filters, and other image operations.
+"""
 
 from .median_utils import *
 from .image_utils import *
