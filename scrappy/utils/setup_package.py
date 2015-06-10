@@ -37,14 +37,14 @@ def get_extensions():
 
     libraries = []
 
-    ext_med = Extension(name="scrappy.scrappy.utils.median_utils",
+    ext_med = Extension(name="scrappy.utils.median_utils",
                     sources=med_sources,
                     include_dirs=include_dirs,
                     libraries=libraries,
                     language="c",
                     extra_compile_args=['-g', '-O3', '-funroll-loops',
                                         '-ffast-math'])
-    ext_im = Extension(name="scrappy.scrappy.utils.image_utils",
+    ext_im = Extension(name="scrappy.utils.image_utils",
                     sources=im_sources,
                     include_dirs=include_dirs,
                     libraries=libraries,
