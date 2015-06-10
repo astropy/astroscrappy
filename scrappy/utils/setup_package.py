@@ -1,3 +1,5 @@
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
 import os
 import sys
 import subprocess
@@ -27,24 +29,24 @@ def check_openmp():
 
 def get_extensions():
 
-    med_sources = [os.path.join(ROOT_DIR, "median_utils.pyx"),
-                   os.path.join(ROOT_DIR, "medutils.c")]
+    med_sources = [str(os.path.join(ROOT_DIR, "median_utils.pyx")),
+                   str(os.path.join(ROOT_DIR, "medutils.c"))]
 
-    im_sources = [os.path.join(ROOT_DIR, "image_utils.pyx"),
-                  os.path.join(ROOT_DIR, "imutils.c")]
+    im_sources = [str(os.path.join(ROOT_DIR, "image_utils.pyx")),
+                  str(os.path.join(ROOT_DIR, "imutils.c"))]
 
     include_dirs = ['numpy', ROOT_DIR]
 
     libraries = []
 
-    ext_med = Extension(name="scrappy.utils.median_utils",
+    ext_med = Extension(name=str('scrappy.utils.median_utils'),
                     sources=med_sources,
                     include_dirs=include_dirs,
                     libraries=libraries,
                     language="c",
                     extra_compile_args=['-g', '-O3', '-funroll-loops',
                                         '-ffast-math'])
-    ext_im = Extension(name="scrappy.utils.image_utils",
+    ext_im = Extension(name=str("scrappy.utils.image_utils"),
                     sources=im_sources,
                     include_dirs=include_dirs,
                     libraries=libraries,
