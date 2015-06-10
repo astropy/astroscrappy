@@ -2,3 +2,12 @@
 
 # This sub-module is destined for common non-package specific utility
 # functions that will ultimately be merged into `astropy.utils`
+
+from .median_utils import *
+from .image_utils import *
+
+__all__ = ['median', 'optmed3', 'optmed5', 'optmed7', 'optmed9',
+           'optmed25', 'medfilt3', 'medfilt5', 'medfilt7',
+           'sepmedfilt3', 'sepmedfilt5', 'sepmedfilt7', 'sepmedfilt9',
+           'subsample', 'rebin', 'convolve', 'laplaceconvolve',
+           'dilate3', 'dilate5']

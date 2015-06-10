@@ -1,0 +1,1 @@
+cdef float cymedian(float* aptr, int n) nogil
