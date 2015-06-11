@@ -191,7 +191,7 @@ def detect_cosmics(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] indat,
     cleanarr *= gain
 
     # Find the saturated stars and add them to the mask
-    updatemask(np.asarray(cleanarr), np.asarray(mask), satlevel, sepmed)
+    update_mask(np.asarray(cleanarr), np.asarray(mask), satlevel, sepmed)
 
     # Find the unmasked pixels to calculate the sky.
     gooddata = np.zeros(int(nx * ny - np.asarray(mask).sum()), dtype=np.float32,
@@ -356,10 +356,10 @@ def detect_cosmics(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] indat,
     return (crmask.astype(np.bool), cleanarr)
 
 
-def updatemask(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] data,
+def update_mask(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] data,
                np.ndarray[np.uint8_t, ndim=2, mode='c', cast=True] mask,
                float satlevel, bool sepmed):
-    """updatemask(data, mask, satlevel, sepmed)\n
+    """update_mask(data, mask, satlevel, sepmed)\n
      Find staturated stars and puts them in the mask.
 
      This can then be used to avoid these regions in cosmic detection and
