@@ -202,7 +202,7 @@ def detect_cosmics(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] indat,
     gooddata[:] = cleanarr[np.logical_not(mask)]
 
     # Get the default background level for large cosmic rays.
-    backgroundlevel = median(gooddata, len(gooddata))
+    background_level = median(gooddata, len(gooddata))
     del gooddata
 
     # Set up the psf kernel if necessary.
@@ -342,13 +342,13 @@ def detect_cosmics(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] indat,
             del m5
         # Masked mean filter
         elif cleantype == 'meanmask':
-            clean_meanmask(cleanarr, crmask, mask, nx, ny, backgroundlevel)
+            clean_meanmask(cleanarr, crmask, mask, nx, ny, background_level)
         # Masked median filter
         elif cleantype == 'medmask':
-            clean_medmask(cleanarr, crmask, mask, nx, ny, backgroundlevel)
+            clean_medmask(cleanarr, crmask, mask, nx, ny, background_level)
         # Inverse distance weighted interpolation
         elif cleantype == 'idw':
-            clean_idwinterp(cleanarr, crmask, mask, nx, ny, backgroundlevel)
+            clean_idwinterp(cleanarr, crmask, mask, nx, ny, background_level)
         else:
             raise ValueError("""cleantype must be one of the following values:
                             [median, meanmask, medmask, idw]""")
@@ -413,8 +413,8 @@ def updatemask(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] data,
 
 cdef void clean_meanmask(float[:, ::1] cleanarr, bool[:, ::1] crmask,
                          bool[:, ::1] mask, int nx, int ny,
-                         float backgroundlevel):
-    """clean_meanmask(cleanarr, crmask, mask, nx, ny, backgroundlevel)\n
+                         float background_level):
+    """clean_meanmask(cleanarr, crmask, mask, nx, ny, background_level)\n
     Clean the bad pixels in cleanarr using a 5x5 masked mean filter.
 
     Parameters
@@ -437,7 +437,7 @@ cdef void clean_meanmask(float[:, ::1] cleanarr, bool[:, ::1] crmask,
         Size of cleanarr in the y-direction. Note cleanarr has dimensions
         ny x nx.
 
-    backgroundlevel : float
+    background_level : float
         Average value of the background. This value will be used if there are
         no good pixels in a 5x5 region.
     """
@@ -469,7 +469,7 @@ cdef void clean_meanmask(float[:, ::1] cleanarr, bool[:, ::1] crmask,
                     # if the pixels count is 0
                     # then put in the background of the image
                     if numpix == 0:
-                        s = backgroundlevel
+                        s = background_level
                     else:
                         # else take the mean
                         s = s / float(numpix)
@@ -479,8 +479,8 @@ cdef void clean_meanmask(float[:, ::1] cleanarr, bool[:, ::1] crmask,
 
 cdef void clean_medmask(float[:, ::1] cleanarr, bool[:, ::1] crmask,
                         bool[:, ::1] mask, int nx, int ny,
-                        float backgroundlevel):
-    """clean_medmask(cleanarr, crmask, mask, nx, ny, backgroundlevel)\n
+                        float background_level):
+    """clean_medmask(cleanarr, crmask, mask, nx, ny, background_level)\n
     Clean the bad pixels in cleanarr using a 5x5 masked median filter.
 
     Parameters
@@ -503,7 +503,7 @@ cdef void clean_medmask(float[:, ::1] cleanarr, bool[:, ::1] crmask,
         size of cleanarr in the y-direction. Note cleanarr has dimensions
         ny x nx.
 
-    backgroundlevel : float
+    background_level : float
         Average value of the background. This value will be used if there are
         no good pixels in a 5x5 region.
     """
@@ -533,7 +533,7 @@ cdef void clean_medmask(float[:, ::1] cleanarr, bool[:, ::1] crmask,
                     # if the pixels count is 0 then put in the background
                     # of the image
                     if numpix == 0:
-                        cleanarr[j, i] = backgroundlevel
+                        cleanarr[j, i] = background_level
                     else:
                         # else take the mean
                         cleanarr[j, i] =  cymedian(medarr, numpix)
@@ -543,8 +543,8 @@ cdef void clean_medmask(float[:, ::1] cleanarr, bool[:, ::1] crmask,
 
 cdef void clean_idwinterp(float[:, ::1] cleanarr, bool[:, ::1] crmask,
                           bool[:, ::1] mask, int nx, int ny,
-                          float backgroundlevel):
-    """clean_idwinterp(cleanarr, crmask, mask, nx, ny, backgroundlevel)\n
+                          float background_level):
+    """clean_idwinterp(cleanarr, crmask, mask, nx, ny, background_level)\n
     Clean the bad pixels in cleanarr using a 5x5 using inverse distance
     weighted interpolation.
 
@@ -568,14 +568,14 @@ cdef void clean_idwinterp(float[:, ::1] cleanarr, bool[:, ::1] crmask,
         Size of cleanarr in the y-direction (int). Note cleanarr has dimensions
         ny x nx.
 
-    backgroundlevel : float
+    background_level : float
         Average value of the background. This value will be used if there are
         no good pixels in a 5x5 region.
     """
 
     # Go through all of the pixels, ignore the borders
     cdef int i, j, k, l
-    cdef float f11, f12, f21, f22 = backgroundlevel
+    cdef float f11, f12, f21, f22 = background_level
     cdef int x1, x2, y1, y2
     weightsarr = np.array([[0.35355339, 0.4472136, 0.5, 0.4472136, 0.35355339],
                           [0.4472136, 0.70710678, 1., 0.70710678, 0.4472136],
@@ -604,7 +604,7 @@ cdef void clean_idwinterp(float[:, ::1] cleanarr, bool[:, ::1] crmask,
                                 val = val + weights[l, k] * cleanarr[y, x]
                                 wsum = wsum + weights[l, k]
                     if wsum < 1e-6:
-                        cleanarr[j, i] = backgroundlevel
+                        cleanarr[j, i] = background_level
                     else:
                         cleanarr[j, i] = val / wsum
 
