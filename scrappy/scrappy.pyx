@@ -25,7 +25,8 @@ ctypedef uint8_t bool
 
 from libc.stdlib cimport malloc, free
 
-def detect_cosmics(cython.floating[:, :] indat, np.uint8_t[:, :] inmask=None,
+def detect_cosmics(np.ndarray[np.float, ndim=2, mode='c', cast=True] indat,
+                   np.ndarray[np.uint8_t, ndim=2, mode='c', cast=True] inmask=None,
                    float sigclip=4.5, float sigfrac=0.3, float objlim=5.0,
                    float gain=1.0, float readnoise=6.5, float satlevel=65536.0,
                    float pssl=0.0, int niter=4, sepmed=True, cleantype='meanmask',
