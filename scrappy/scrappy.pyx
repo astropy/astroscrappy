@@ -13,10 +13,10 @@ cimport numpy as np
 
 np.import_array()
 
+cimport cython
 from cython.parallel cimport parallel, prange
 
 from .utils import *
-
 from .utils.median_utils cimport cymedian
 
 from libc.stdint cimport uint8_t
@@ -25,18 +25,17 @@ ctypedef uint8_t bool
 
 from libc.stdlib cimport malloc, free
 
-def detect_cosmics(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] indat,
-              np.ndarray[np.uint8_t, ndim=2, mode='c', cast=True] inmask=None,
-              float sigclip=4.5, float sigfrac=0.3, float objlim=5.0,
-              float gain=1.0, float readnoise=6.5, float satlevel=65536.0,
-              float pssl=0.0, int niter=4, sepmed=True, cleantype='meanmask',
-              fsmode='median', psfmodel='gauss', float psffwhm=2.5,
-              int psfsize=7, psfk=None, float psfbeta=4.765, verbose=False):
+def detect_cosmics(cython.floating[:, :] indat, np.uint8_t[:, :] inmask=None,
+                   float sigclip=4.5, float sigfrac=0.3, float objlim=5.0,
+                   float gain=1.0, float readnoise=6.5, float satlevel=65536.0,
+                   float pssl=0.0, int niter=4, sepmed=True, cleantype='meanmask',
+                   fsmode='median', psfmodel='gauss', float psffwhm=2.5,
+                   int psfsize=7, psfk=None, float psfbeta=4.765, verbose=False):
     """detect_cosmics(indat, inmask=None, sigclip=4.5, sigfrac=0.3, objlim=5.0,
-                 gain=1.0, readnoise=6.5, satlevel=65536.0, pssl=0.0, niter=4,
-                 sepmed=True, cleantype='meanmask', fsmode='median',
-                 psfmodel='gauss', psffwhm=2.5,psfsize=7, psfk=None,
-                 psfbeta=4.765, verbose=False)\n
+                      gain=1.0, readnoise=6.5, satlevel=65536.0, pssl=0.0,
+                      niter=4, sepmed=True, cleantype='meanmask',
+                      fsmode='median', psfmodel='gauss', psffwhm=2.5,
+                      psfsize=7, psfk=None, psfbeta=4.765, verbose=False)\n
     Detect cosmic rays in a numpy array.
 
     If you use this code, please add this repository address in a footnote:
@@ -357,8 +356,8 @@ def detect_cosmics(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] indat,
 
 
 def update_mask(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] data,
-               np.ndarray[np.uint8_t, ndim=2, mode='c', cast=True] mask,
-               float satlevel, bool sepmed):
+                np.ndarray[np.uint8_t, ndim=2, mode='c', cast=True] mask,
+                float satlevel, bool sepmed):
     """update_mask(data, mask, satlevel, sepmed)\n
      Find staturated stars and puts them in the mask.
 
