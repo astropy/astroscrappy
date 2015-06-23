@@ -42,12 +42,8 @@ imdata = np.random.poisson(imdata)
 imdata += np.random.normal(0.0, 10.0, size=(1001, 1001))
 
 # Add 100 fake cosmic rays
-xinds = np.arange(1001)
-yinds = np.arange(1001)
-
-# Choose our cosmic ray pixels
-cr_x = np.random.choice(xinds, size=100)
-cr_y = np.random.choice(yinds, size=100)
+cr_x = np.random.randint(low=5, high=995, size=100)
+cr_y = np.random.randint(low=5, high=995, size=100)
 
 cr_brightnesses = np.random.uniform(low=1000.0, high=30000.0, size=100)
 
