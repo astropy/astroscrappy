@@ -39,14 +39,14 @@ def get_extensions():
 
     libraries = []
 
-    ext_med = Extension(name=str('scrappy.utils.median_utils'),
+    ext_med = Extension(name=str('astroscrappy.utils.median_utils'),
                     sources=med_sources,
                     include_dirs=include_dirs,
                     libraries=libraries,
                     language="c",
                     extra_compile_args=['-g', '-O3', '-funroll-loops',
                                         '-ffast-math'])
-    ext_im = Extension(name=str("scrappy.utils.image_utils"),
+    ext_im = Extension(name=str("astroscrappy.utils.image_utils"),
                     sources=im_sources,
                     include_dirs=include_dirs,
                     libraries=libraries,
@@ -62,7 +62,7 @@ def get_extensions():
         ext_im.extra_link_args = ['-g', '-fopenmp']
     else:
         log.warn('OpenMP was not found. '
-                 'scrappy will be compiled without OpenMP. '
+                 'astroscrappy will be compiled without OpenMP. '
                  '(Use the "-v" option of setup.py for more details.)')
         log.debug(('(Start of OpenMP info)\n'
                    'compiler stdout:\n{0}\n'

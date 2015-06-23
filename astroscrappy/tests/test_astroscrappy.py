@@ -2,7 +2,7 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 import numpy as np
-from ..scrappy import detect_cosmics
+from ..astroscrappy import detect_cosmics
 
 # Make a simple Gaussian function for testing purposes
 def gaussian(image_shape, x0, y0, brightness, fwhm):

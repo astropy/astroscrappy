@@ -4,7 +4,7 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 """
-Name : scrappy: The Speedy Cosmic Ray Annihilation Package in Python
+Name : astroscrappy: The Speedy Cosmic Ray Annihilation Package in Python
 Author : Curtis McCully
 Date : October 2014
 """
@@ -39,7 +39,7 @@ def detect_cosmics(indat, inmask=None, float sigclip=4.5, float sigfrac=0.3,
     Detect cosmic rays in a numpy array.
 
     If you use this code, please add this repository address in a footnote:
-    https://github.com/astropy/astro-scrappy
+    https://github.com/astropy/astroscrappy
 
     Please cite the original paper which can be found at:
     http://www.astro.yale.edu/dokkum/lacosmic/

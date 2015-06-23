@@ -21,7 +21,7 @@ readability has been sacrificed, specifically in the C code.
 L.A.Cosmic = LAplacian Cosmic ray detection
 
 If you use this code, please consider adding this repository address in a
-footnote: https://github.com/astropy/astro-scrappy.
+footnote: https://github.com/astropy/astroscrappy.
 
 Please cite the original paper which can be found at:
 http://www.astro.yale.edu/dokkum/lacosmic/
@@ -65,7 +65,7 @@ from ._astropy_init import *
 
 # For egg_info test builds to pass, put package imports here.
 if not _ASTROPY_SETUP_:
-    from .scrappy import *
+    from .astroscrappy import *
     from .utils import *
 
 __all__ = ['detect_cosmics']

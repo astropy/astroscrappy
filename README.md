@@ -18,7 +18,7 @@ where I can. This is designed to be as fast as possible so some of the
 readability has been sacrificed, specifically in the C code.
 
 If you use this code, please consider adding this repository address in a
-footnote: https://github.com/astropy/astropy-scrappy
+footnote: https://github.com/astropy/astroscrappy
 
 Please cite the original paper which can be found at:
 http://www.astro.yale.edu/dokkum/lacosmic/
