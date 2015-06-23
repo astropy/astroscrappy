@@ -2,7 +2,7 @@
 
 """
 Astro-SCRAPPY: The Speedy Cosmic Ray Annihilation Package in Python
-===================================
+===================================================================
 
 Name : Astro-SCRAPPY
 Author : Curtis McCully
@@ -39,22 +39,22 @@ Notes
 -----
 Differences from original LACosmic:
 
-- Automatic recognition of saturated stars.
-This avoids treating such stars as large cosmic rays.
+    - Automatic recognition of saturated stars.
+      This avoids treating such stars as large cosmic rays.
 
--I have tried to optimize all of the code as much as possible while
-maintaining the integrity of the algorithm. One of the key speedups is to
-use a separable median filter instead of the true median filter. While these
-are not identical, they produce comparable results and the separable version
-is much faster.
+    - I have tried to optimize all of the code as much as possible while
+      maintaining the integrity of the algorithm. One of the key speedups is to
+      use a separable median filter instead of the true median filter. While these
+      are not identical, they produce comparable results and the separable version
+      is much faster.
 
--This implementation is much faster than the Python by as much as a factor of
-28 depending on the given parameters.
-This implementation is much faster than the original IRAF version, by a factor
-of ~90.
+    - This implementation is much faster than the Python by as much as a factor of
+      28 depending on the given parameters.
+      This implementation is much faster than the original IRAF version, by a factor
+      of ~90.
 
--The arrays always must be C-contiguous, thus all loops are y outer, x inner.
-Note that this follows the Pyfits convention.
+    - The arrays always must be C-contiguous, thus all loops are y outer, x inner.
+      Note that this follows the Pyfits convention.
 """
 
 # Affiliated packages may add whatever they like to this file, but
