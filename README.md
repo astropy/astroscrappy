@@ -34,7 +34,7 @@ e.g. clang.
 
 Notes
 -----
-Differences from original LA Cosmic:
+There are some differences from original LA Cosmic:
 
 - Automatic recognition of saturated stars.
 This avoids treating such stars as large cosmic rays.
@@ -51,5 +51,8 @@ With multiple threads, this can be increased easily by another factor of 2.
 This implementation is much faster than the original IRAF version, improvment
 by a factor of ~90.
 
-- The arrays always must be C-contiguous, thus all loops are y outer, x inner.
-Note that this follows the Pyfits convention.
+The arrays always must be C-contiguous, thus all loops are y outer, x inner.
+This follows the Pyfits convention.
+
+scipy is required for certain tests to pass, but the code itself does not depend on
+scipy.
