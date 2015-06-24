@@ -1,8 +1,8 @@
 ****************
-SCRAPPY
+ASTROSCRAPPY
 ****************
 
 Reference/API
 =============
 
-.. automodapi:: scrappy
+.. automodapi:: astroscrappy
