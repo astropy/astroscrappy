@@ -43,7 +43,7 @@ LONG_DESCRIPTION = package.__doc__
 builtins._ASTROPY_PACKAGE_NAME_ = PACKAGENAME
 
 # VERSION should be PEP386 compatible (http://www.python.org/dev/peps/pep-0386)
-VERSION = '0.0.dev'
+VERSION = '1.0'
 
 # Indicates if this version is a release version
 RELEASE = 'dev' not in VERSION
@@ -104,7 +104,7 @@ setup(name=PACKAGENAME,
       version=VERSION,
       description=DESCRIPTION,
       scripts=scripts,
-      install_requires=['astropy'],
+      setup_requires=['numpy','cython', 'astropy'],
       author=AUTHOR,
       author_email=AUTHOR_EMAIL,
       license=LICENSE,
