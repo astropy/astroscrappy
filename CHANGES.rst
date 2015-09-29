@@ -1,8 +1,12 @@
-1.1 (unreleased)
-----------------
+1.0.2 (2015-09-29)
+------------------
 
-- No changes yet
+- Added .h files to MANIFEST.in
 
+1.0.1 (2015-09-29)
+------------------
+
+- Fixed bug in MANIFEST.in that was excluding *.pyx files.
 
 1.0 (2015-09-29)
 ----------------
