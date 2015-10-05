@@ -1,7 +1,7 @@
 1.1 (unreleased)
 ----------------
 
-- No changes yet.
+- Pinned coverage version to 3.7.1
 
 
 1.0.3 (2015-09-29)
