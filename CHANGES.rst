@@ -1,7 +1,9 @@
 1.1 (unreleased)
 ----------------
 
-- Pinned coverage version to 3.7.1
+- Fixed setup_requires so that it doesn't install astropy when using egg_info.
+
+- Pinned coverage version to 3.7.1.
 
 
 1.0.3 (2015-09-29)

@@ -19,6 +19,7 @@ from astropy_helpers.setup_helpers import (
     register_commands, adjust_compiler, get_debug_option, get_package_info)
 from astropy_helpers.git_helpers import get_git_devstr
 from astropy_helpers.version_helpers import generate_version_py
+from astropy_helpers.distutils_helpers import is_distutils_display_option
 
 # Get some values from the setup.cfg
 from distutils import config
@@ -96,6 +97,12 @@ for root, dirs, files in os.walk(PACKAGENAME):
                     os.path.relpath(root, PACKAGENAME), filename))
 package_info['package_data'][PACKAGENAME].extend(c_files)
 
+# Avoid installing setup_requires dependencies if the user just
+# queries for information
+if is_distutils_display_option():
+    setup_requires = []
+else:
+    setup_requires=['numpy','cython'],
 # Note that requires and provides should not be included in the call to
 # ``setup``, since these are now deprecated. See this link for more details:
 # https://groups.google.com/forum/#!topic/astropy-dev/urYO8ckB2uM
@@ -104,7 +111,8 @@ setup(name=PACKAGENAME,
       version=VERSION,
       description=DESCRIPTION,
       scripts=scripts,
-      setup_requires=['numpy','cython', 'astropy'],
+      setup_requires=setup_requires,
+      install_requires=['astropy'],
       author=AUTHOR,
       author_email=AUTHOR_EMAIL,
       license=LICENSE,
