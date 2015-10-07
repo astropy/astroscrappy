@@ -37,19 +37,19 @@ Notes
 There are some differences from original LA Cosmic:
 
 - Automatic recognition of saturated stars.
-This avoids treating such stars as large cosmic rays.
+  This avoids treating such stars as large cosmic rays.
 
 - I have tried to optimize all of the code as much as possible while
-maintaining the integrity of the algorithm. One of the key speedups is to
-use a separable median filter instead of the true median filter. While these
-are not identical, they produce comparable results and the separable version
-is much faster.
+  maintaining the integrity of the algorithm. One of the key speedups is to
+  use a separable median filter instead of the true median filter. While these
+  are not identical, they produce comparable results and the separable version
+  is much faster.
 
 - This implementation is much faster than the Python by as much as a factor of
-~17 depending on the given parameters, even without running multiple threads.
-With multiple threads, this can be increased easily by another factor of 2.
-This implementation is much faster than the original IRAF version, improvment
-by a factor of ~90.
+  ~17 depending on the given parameters, even without running multiple threads.
+  With multiple threads, this can be increased easily by another factor of 2.
+  This implementation is much faster than the original IRAF version, improvment
+  by a factor of ~90.
 
 The arrays always must be C-contiguous, thus all loops are y outer, x inner.
 This follows the Pyfits convention.
