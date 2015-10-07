@@ -57,8 +57,7 @@ This follows the Pyfits convention.
 scipy is required for certain tests to pass, but the code itself does not depend on
 scipy.
 
-.. image:: https://travis-ci.org/astropy/astropy-helpers.png
+.. image:: https://travis-ci.org/astropy/astroscrappy.png
     :target: https://travis-ci.org/astropy/astroscrappy
-
-.. image:: https://coveralls.io/repos/astropy/astropy-helpers/badge.png
+.. image:: https://coveralls.io/repos/astropy/astroscrappy/badge.png
     :target: https://coveralls.io/r/astropy/astroscrappy
