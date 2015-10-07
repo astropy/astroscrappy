@@ -58,7 +58,7 @@ scipy is required for certain tests to pass, but the code itself does not depend
 scipy.
 
 .. image:: https://travis-ci.org/astropy/astropy-helpers.png
-    :target: https://travis-ci.org/astropy/astropy-helpers
+    :target: https://travis-ci.org/astropy/astroscrappy
 
 .. image:: https://coveralls.io/repos/astropy/astropy-helpers/badge.png
-    :target: https://coveralls.io/r/astropy/astropy-helpers
+    :target: https://coveralls.io/r/astropy/astroscrappy
