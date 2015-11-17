@@ -1,5 +1,17 @@
 language: python
 
+# Setting sudo to false opts in to Travis-CI container-based builds.
+sudo: false
+
+# The apt packages below are needed for sphinx builds, which can no longer
+# be installed with sudo apt-get.
+addons:
+    apt:
+        packages:
+            - graphviz
+            - texlive-latex-extra
+            - dvipng
+
 python:
     - 2.6
     - 2.7
@@ -59,17 +71,15 @@ before_install:
     # Use utf8 encoding. Should be default, but this is insurance against
     # future changes
     - export PYTHONIOENCODING=UTF8
-    - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
-    - chmod +x miniconda.sh
-    - ./miniconda.sh -b
-    - export PATH=/home/travis/miniconda/bin:$PATH
-    - conda update --yes conda
 
-    # UPDATE APT-GET LISTINGS
-    - sudo apt-get update
-
-    # DOCUMENTATION DEPENDENCIES
-    - if [[ $SETUP_CMD == build_sphinx* ]]; then sudo apt-get install graphviz texlive-latex-extra dvipng; fi
+    # http://conda.pydata.org/docs/travis.html#the-travis-yml-file
+    - wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+    - bash miniconda.sh -b -p $HOME/miniconda
+    - export PATH="$HOME/miniconda/bin:$PATH"
+    - hash -r
+    - conda config --set always_yes yes --set changeps1 no
+    - conda update -q conda
+    - conda info -a
 
 install:
 
