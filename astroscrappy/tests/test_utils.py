@@ -189,7 +189,7 @@ def test_subsample():
 
 def test_rebin():
     a = np.ascontiguousarray(np.random.random((2002, 2002)), dtype=np.float32)
-    a = a.astype('<f4')
+    a = a.astype('f4')
     nprebin = np.zeros((1001, 1001), dtype=np.float32).astype('f4')
     for i in range(1001):
         for j in range(1001):
