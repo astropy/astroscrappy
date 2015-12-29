@@ -17,6 +17,7 @@ python:
     - 2.7
     - 3.3
     - 3.4
+    - 3.5
     # This is just for "egg_info".  All other builds are explicitly given in the matrix
 env:
     global:
@@ -57,6 +58,8 @@ matrix:
           env: SETUP_CMD='test'
         - python: 3.4
           env: SETUP_CMD='test'
+        - python: 3.5
+          env: SETUP_CMD='test'
 
         # Try older numpy versions
         - python: 2.7
@@ -65,6 +68,8 @@ matrix:
           env: NUMPY_VERSION=1.7 SETUP_CMD='test'
         - python: 2.7
           env: NUMPY_VERSION=1.6 SETUP_CMD='test'
+        - python: 2.7
+          env: NUMPY_VERSION=1.10 SETUP_CMD='test'
 
 before_install:
 
