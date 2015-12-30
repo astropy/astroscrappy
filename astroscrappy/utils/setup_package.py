@@ -7,6 +7,8 @@ import subprocess
 from distutils.core import Extension
 from distutils import log
 
+from astropy_helpers import setup_helpers
+
 UTIL_DIR = os.path.relpath(os.path.dirname(__file__))
 
 CODELINES = """
@@ -19,12 +21,22 @@ sys.exit(int(ccompiler.has_function('omp_get_num_threads')))
 
 
 def check_openmp():
-    s = subprocess.Popen([sys.executable], stdin=subprocess.PIPE,
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE)
-    stdout, stderr = s.communicate(CODELINES.encode('utf-8'))
-    s.wait()
-    return bool(s.returncode), (stdout, stderr)
+    if setup_helpers.get_compiler_option() == 'msvc':
+        # The free version of the Microsoft compilers supports
+        # OpenMP in MSVC 2008 (python 2.7) and MSVC 2015 (python 3.5+),
+        # but not MSVC 2010 (python 3.4 and lower).
+        major, minor = sys.version_info[:2]
+        has_openmp = not (major == 3  and minor < 5)
+        # Empty return tuple is to match the alternative check, below.
+        return has_openmp, ("", "")
+    else:
+        # Unix-y compiler, use this check.
+        s = subprocess.Popen([sys.executable], stdin=subprocess.PIPE,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+        stdout, stderr = s.communicate(CODELINES.encode('utf-8'))
+        s.wait()
+        return bool(s.returncode), (stdout, stderr)
 
 
 def get_extensions():
@@ -56,10 +68,14 @@ def get_extensions():
 
     has_openmp, outputs = check_openmp()
     if has_openmp:
-        ext_med.extra_compile_args.append('-fopenmp')
-        ext_im.extra_compile_args.append('-fopenmp')
-        ext_med.extra_link_args = ['-g', '-fopenmp']
-        ext_im.extra_link_args = ['-g', '-fopenmp']
+        if setup_helpers.get_compiler_option() == 'msvc':
+            ext_med.extra_compile_args.append('-openmp')
+            ext_im.extra_compile_args.append('-openmp')
+        else:
+            ext_med.extra_compile_args.append('-fopenmp')
+            ext_im.extra_compile_args.append('-fopenmp')
+            ext_med.extra_link_args = ['-g', '-fopenmp']
+            ext_im.extra_link_args = ['-g', '-fopenmp']
     else:
         log.warn('OpenMP was not found. '
                  'astroscrappy will be compiled without OpenMP. '
