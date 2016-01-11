@@ -36,7 +36,7 @@ for i in range(100):
     imdata += gaussian(imdata.shape, x, y, brightness, 3.5)
 
 # Add the poisson noise
-imdata = np.random.poisson(imdata)
+imdata = np.float32(np.random.poisson(imdata))
 
 # Add readnoise
 imdata += np.random.normal(0.0, 10.0, size=(1001, 1001))
