@@ -8,6 +8,7 @@ Name : astroscrappy: The Speedy Cosmic Ray Annihilation Package in Python
 Author : Curtis McCully
 Date : October 2014
 """
+
 import numpy as np
 cimport numpy as np
 
