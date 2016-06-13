@@ -338,7 +338,8 @@ def detect_cosmics(indat, inmask=None, float sigclip=4.5, float sigfrac=0.3,
         # otherwise clean the image and iterate
         if cleantype == 'median':
             # Unmasked median filter
-            cleanarr[crmask] = m5[crmask]
+            cindices = crmask.nonzero()
+            cleanarr[cindices] = m5[cindices]
             del m5
         # Masked mean filter
         elif cleantype == 'meanmask':
