@@ -602,8 +602,8 @@ cdef void clean_idwinterp(float[:, ::1] cleanarr, bool[:, ::1] crmask,
                         for k in range(-2, 3):
                             x = i + k
                             if not (crmask[y, x] or mask[y, x]):
-                                val = val + weights[l, k] * cleanarr[y, x]
-                                wsum = wsum + weights[l, k]
+                                val = val + weights[l+2, k+2] * cleanarr[y, x]
+                                wsum = wsum + weights[l+2, k+2]
                     if wsum < 1e-6:
                         cleanarr[j, i] = background_level
                     else:
