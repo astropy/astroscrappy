@@ -1,3 +1,6 @@
+1.1 (unreleased)
+----------------
+
 1.0.5 (2016-08-16)
 ------------------
 - Updated to newest version of astropy package template.
