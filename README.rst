@@ -17,7 +17,6 @@ I have ported all of the slow functions to Cython/C, and optimized
 where I can. This is designed to be as fast as possible so some of the
 readability has been sacrificed, specifically in the C code.
 
-<<<<<<< HEAD
 If you use this code, please consider adding this repository address in a
 footnote: https://github.com/astropy/astroscrappy
 
