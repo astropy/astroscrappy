@@ -63,4 +63,3 @@ def test_medclean():
     mask2, _clean = detect_cosmics(imdata, fsmode='median', cleantype='median', niter = 2)
     
     assert (mask1.sum() < mask2.sum())
-
