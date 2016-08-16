@@ -47,6 +47,10 @@ try:
 except ImportError:
     from configparser import ConfigParser
 conf = ConfigParser()
+<<<<<<< HEAD
+=======
+
+>>>>>>> template/master
 conf.read([os.path.join(os.path.dirname(__file__), '..', 'setup.cfg')])
 setup_cfg = dict(conf.items('metadata'))
 
