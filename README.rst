@@ -52,7 +52,7 @@ There are some differences from original LA Cosmic:
   by a factor of ~90.
 
 The arrays always must be C-contiguous, thus all loops are y outer, x inner.
-This follows the Pyfits convention.
+This follows the astropy.io.fits (pyfits) convention.
 
 scipy is required for certain tests to pass, but the code itself does not depend on
 scipy.
@@ -61,3 +61,4 @@ scipy.
     :target: https://travis-ci.org/astropy/astroscrappy
 .. image:: https://coveralls.io/repos/astropy/astroscrappy/badge.png
     :target: https://coveralls.io/r/astropy/astroscrappy
+    :alt: Travis Status

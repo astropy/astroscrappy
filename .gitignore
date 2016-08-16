@@ -1,5 +1,5 @@
 # Compiled files
-*.py[co]
+*.py[cod]
 *.a
 *.o
 *.so
@@ -17,6 +17,7 @@ __pycache__
 htmlcov
 .coverage
 MANIFEST
+.ipynb_checkpoints
 
 # Sphinx
 docs/api
@@ -33,6 +34,7 @@ docs/_build
 # Packages/installer info
 *.egg
 *.egg-info
+*.eggs
 dist
 build
 eggs
@@ -45,7 +47,9 @@ develop-eggs
 distribute-*.tar.gz
 
 # Other
-.*.swp
+.cache
+.tox
+.*.sw[op]
 *~
 
 # Mac OSX

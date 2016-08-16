@@ -11,12 +11,30 @@ from astropy_helpers import setup_helpers
 
 UTIL_DIR = os.path.relpath(os.path.dirname(__file__))
 
-CODELINES = """
+CODELINES = r"""
 import sys
+import os
 from distutils.ccompiler import new_compiler
+from distutils.sysconfig import customize_compiler
 ccompiler = new_compiler()
+customize_compiler(ccompiler)
 ccompiler.add_library('gomp')
-sys.exit(int(ccompiler.has_function('omp_get_num_threads')))
+has_omp_functions = ccompiler.has_function('omp_get_num_threads')
+with open('openmp_check.c', 'w') as f:
+    f.write('#include<stdio.h>\n')
+    f.write('int main()\n')
+    f.write('{\n')
+    f.write('printf("Hello World");\n')
+    f.write('}')
+try:
+    ccompiler.compile(['openmp_check.c'], extra_postargs=['-fopenmp'])
+    fopenmp_flag_works = True
+except:
+    fopenmp_flag_works = False
+os.remove('openmp_check.c')
+if os.path.exists('openmp_check.o'):
+    os.remove('openmp_check.o')
+sys.exit(int(has_omp_functions & fopenmp_flag_works))
 """
 
 
@@ -26,7 +44,7 @@ def check_openmp():
         # OpenMP in MSVC 2008 (python 2.7) and MSVC 2015 (python 3.5+),
         # but not MSVC 2010 (python 3.4 and lower).
         major, minor = sys.version_info[:2]
-        has_openmp = not (major == 3  and minor < 5)
+        has_openmp = not (major == 3 and minor < 5)
         # Empty return tuple is to match the alternative check, below.
         return has_openmp, ("", "")
     else:
