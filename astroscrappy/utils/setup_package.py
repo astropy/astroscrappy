@@ -15,9 +15,10 @@ CODELINES = r"""
 import sys
 import os
 from distutils.ccompiler import new_compiler
+from distutils.sysconfig import customize_compiler
 ccompiler = new_compiler()
+customize_compiler(ccompiler)
 ccompiler.add_library('gomp')
-print(ccompiler.compiler)
 has_omp_functions = ccompiler.has_function('omp_get_num_threads')
 with open('openmp_check.c', 'w') as f:
     f.write('#include<stdio.h>\n')
