@@ -644,7 +644,7 @@ def gausskernel(float psffwhm, int kernsize):
 
 def gaussxkernel(float psffwhm, int kernsize):
     """gaussxkernel(psffwhm, kernsize)\n
-    Calculate a Guassian kernel in the x-direction.
+    Calculate a Gaussian kernel in the x-direction.
 
     This can be used for spectroscopic data.
 
@@ -675,7 +675,7 @@ def gaussxkernel(float psffwhm, int kernsize):
 
 def gaussykernel(float psffwhm, int kernsize):
     """gaussykernel(psffwhm, kernsize)\n
-    Calculate a Guassian kernel in the y-direction.
+    Calculate a Gaussian kernel in the y-direction.
 
     This can be used for spectroscopic data.
 
