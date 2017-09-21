@@ -24,15 +24,16 @@ ctypedef uint8_t bool
 
 from libc.stdlib cimport malloc, free
 
-def detect_cosmics(indat, inmask=None, float sigclip=4.5, float sigfrac=0.3,
-                   float objlim=5.0, float gain=1.0, float readnoise=6.5,
-                   float satlevel=65536.0, float pssl=0.0, int niter=4,
-                   sepmed=True, cleantype='meanmask', fsmode='median',
-                   psfmodel='gauss', float psffwhm=2.5, int psfsize=7,
-                   psfk=None, float psfbeta=4.765, verbose=False):
-    """detect_cosmics(indat, inmask=None, sigclip=4.5, sigfrac=0.3, objlim=5.0,
-                      gain=1.0, readnoise=6.5, satlevel=65536.0, pssl=0.0,
-                      niter=4, sepmed=True, cleantype='meanmask',
+def detect_cosmics(indat, inmask=None, bgsub=None, float sigclip=4.5,
+                   float sigfrac=0.3, float objlim=5.0, float gain=1.0,
+                   float readnoise=6.5, float satlevel=65536.0, float pssl=0.0,
+                   int niter=4, sepmed=True, cleantype='meanmask',
+                   fsmode='median', psfmodel='gauss', float psffwhm=2.5,
+                   int psfsize=7, psfk=None, float psfbeta=4.765,
+                   verbose=False):
+    """detect_cosmics(indat, inmask=None, bgsub=None, sigclip=4.5, sigfrac=0.3,
+                      objlim=5.0, gain=1.0, readnoise=6.5, satlevel=65536.0,
+                      pssl=0.0, niter=4, sepmed=True, cleantype='meanmask',
                       fsmode='median', psfmodel='gauss', psffwhm=2.5,
                       psfsize=7, psfk=None, psfbeta=4.765, verbose=False)\n
     Detect cosmic rays in a numpy array.
@@ -54,6 +55,10 @@ def detect_cosmics(indat, inmask=None, float sigclip=4.5, float sigfrac=0.3,
     inmask : boolean numpy array, optional
         Input bad pixel mask. Values of True will be ignored in the cosmic ray
         detection/cleaning process. Default: None.
+
+    bgsub : float numpy array, optional
+        A previously-subtracted background model (of continuum and/or sky,
+        used in place of `pssl` for spectroscopic data), in ADU.
 
     sigclip : float, optional
         Laplacian-to-noise limit for cosmic ray detection. Lower values will
@@ -251,6 +256,11 @@ def detect_cosmics(indat, inmask=None, float sigclip=4.5, float sigfrac=0.3,
             m5 = sepmedfilt7(cleanarr)
         else:
             m5 = medfilt5(cleanarr)
+
+        # Add the any object/sky model flux back to the background estimate
+        # in order to estimate the noise accurately:
+        if bgsub is not None:
+            m5 += (bgsub * gain)
 
         # Clip noise so that we can take a square root
         m5[m5 < 0.00001] = 0.00001
