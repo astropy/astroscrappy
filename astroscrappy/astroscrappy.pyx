@@ -264,11 +264,12 @@ def detect_cosmics(indat, inmask=None, bkg=None, float sigclip=4.5,
         else:
             m5 = medfilt5(cleanarr)
 
-        # Add the any object/sky model flux back to the background estimate
-        # in order to estimate the noise accurately:
+        # Add any object/sky model flux back to the background estimate in
+        # order to estimate the noise accurately (first saving a copy if using
+        # the same median to replace bad values):
+        if cleantype == 'median':
+            m5_nobkg = m5 if bkg is None else m5.copy()
         if bkg is not None:
-            if cleantype == 'median':
-                m5_nobkg = m5.copy()
             m5 += (bkg * gain)
 
         # Clip noise so that we can take a square root
