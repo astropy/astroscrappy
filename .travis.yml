@@ -79,8 +79,6 @@ matrix:
           env: SETUP_CMD='build_sphinx -w'
 
         # Try Astropy development version
-        - python: 2.7
-          env: ASTROPY_VERSION=development
         - python: 3.5
           env: ASTROPY_VERSION=development
         - python: 2.7
