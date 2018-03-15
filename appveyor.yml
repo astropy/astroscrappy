@@ -21,18 +21,18 @@ environment:
       # are in astropy-ci-extras. If your package uses either of these,
       # add the channels to CONDA_CHANNELS along with any other channels
       # you want to use.
-      # CONDA_CHANNELS: "astopy-ci-extras astropy"
+      # CONDA_CHANNELS: "astropy-ci-extras astropy"
 
   matrix:
 
-      # We test Python 2.7 and 3.5 because 2.7 is the supported Python 2
-      # release of Astropy and Python 3.5 is the latest Python 3 release.
+      # We test Python 2.7 and 3.6 because 2.7 is the supported Python 2
+      # release of Astropy and Python 3.6 is the latest Python 3 release.
 
       - PYTHON_VERSION: "2.7"
         ASTROPY_VERSION: "stable"
         NUMPY_VERSION: "stable"
 
-      - PYTHON_VERSION: "3.5"
+      - PYTHON_VERSION: "3.6"
         ASTROPY_VERSION: "stable"
         NUMPY_VERSION: "stable"
 
@@ -40,7 +40,7 @@ platform:
     -x64
 
 install:
-    - "git clone git://github.com/astropy/ci-helpers.git"
+    - "git clone --depth 1 git://github.com/astropy/ci-helpers.git"
     - "powershell ci-helpers/appveyor/install-miniconda.ps1"
     - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
     - "activate test"
