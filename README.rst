@@ -62,3 +62,8 @@ scipy.
 .. image:: https://coveralls.io/repos/astropy/astroscrappy/badge.png
     :target: https://coveralls.io/r/astropy/astroscrappy
     :alt: Travis Status
+
+License
+-------
+
+This project is Copyright (c) Astropy Developers and licensed under the terms of the BSD 3-Clause license. See the licenses folder for more information.

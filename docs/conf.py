@@ -53,6 +53,9 @@ setup_cfg = dict(conf.items('metadata'))
 
 # -- General configuration ----------------------------------------------------
 
+# By default, highlight as Python 3.
+highlight_language = 'python3'
+
 # If your documentation needs a minimal Sphinx version, state it here.
 #needs_sphinx = '1.2'
 
@@ -90,7 +93,7 @@ version = package.__version__.split('-', 1)[0]
 release = package.__version__
 
 
-# -- Options for HTML output ---------------------------------------------------
+# -- Options for HTML output --------------------------------------------------
 
 # A NOTE ON HTML THEMES
 # The global astropy configuration uses a custom theme, 'bootstrap-astropy',
@@ -98,6 +101,7 @@ release = package.__version__
 # the options for this theme can be modified by overriding some of the
 # variables set in the global configuration. The variables set in the
 # global configuration are listed below, commented out.
+
 
 # Add any paths that contain custom themes here, relative to this directory.
 # To use a different custom theme, add the directory containing the theme.
@@ -108,8 +112,21 @@ release = package.__version__
 # name of a builtin theme or the name of a custom theme in html_theme_path.
 #html_theme = None
 
+# Please update these texts to match the name of your package.
+html_theme_options = {
+    'logotext1': 'package',  # white,  semi-bold
+    'logotext2': '-template',  # orange, light
+    'logotext3': ':docs'   # white,  light
+    }
+
+
+
 # Custom sidebar templates, maps document names to template names.
 #html_sidebars = {}
+
+# The name of an image file (relative to this directory) to place at the top
+# of the sidebar.
+#html_logo = ''
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
@@ -128,7 +145,7 @@ html_title = '{0} v{1}'.format(project, release)
 htmlhelp_basename = project + 'doc'
 
 
-# -- Options for LaTeX output --------------------------------------------------
+# -- Options for LaTeX output -------------------------------------------------
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
@@ -136,7 +153,7 @@ latex_documents = [('index', project + '.tex', project + u' Documentation',
                     author, 'manual')]
 
 
-# -- Options for manual page output --------------------------------------------
+# -- Options for manual page output -------------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
@@ -144,7 +161,7 @@ man_pages = [('index', project.lower(), project + u' Documentation',
               [author], 1)]
 
 
-## -- Options for the edit_on_github extension ----------------------------------------
+# -- Options for the edit_on_github extension ---------------------------------
 
 if eval(setup_cfg.get('edit_on_github')):
     extensions += ['astropy_helpers.sphinx.ext.edit_on_github']
@@ -158,3 +175,7 @@ if eval(setup_cfg.get('edit_on_github')):
 
     edit_on_github_source_root = ""
     edit_on_github_doc_root = "docs"
+
+# -- Resolving issue number to links in changelog -----------------------------
+github_issues_url = 'https://github.com/{0}/issues/'.format(setup_cfg['github_project'])
+

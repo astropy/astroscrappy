@@ -1,4 +1,5 @@
 [run]
+plugins = Cython.Coverage
 source = {packagename}
 omit =
    {packagename}/_astropy_init*

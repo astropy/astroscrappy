@@ -1,6 +1,7 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 # cython: profile=True, boundscheck=False, nonecheck=False, wraparound=False
-# cython: cdivision=True
+# cython: cdivision=True, cython: linetrace=True
+# distutils: define_macros=CYTHON_TRACE=1
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 """
