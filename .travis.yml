@@ -119,7 +119,7 @@ matrix:
         # Do a PEP8 test with pycodestyle
         # (allow to fail unless your code completely compliant)
         - os: linux
-          env: MAIN_CMD='pycodestyle packagename --count' SETUP_CMD=''
+          env: MAIN_CMD='pycodestyle astroscrappy --count' SETUP_CMD=''
 
 install:
 
