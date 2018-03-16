@@ -77,6 +77,7 @@ matrix:
         # Do a coverage test.
         - os: linux
           env: SETUP_CMD='test --coverage'
+               CFLAGS='-ftest-coverage
 
         # Check for sphinx doc build warnings - we do this first because it
         # may run for a long time
@@ -113,7 +114,7 @@ matrix:
 
         # Do a PEP8 test with pycodestyle
         - os: linux
-          env: MAIN_CMD='pycodestyle packagename --count' SETUP_CMD=''
+          env: MAIN_CMD='pycodestyle astroscrappy --count' SETUP_CMD=''
 
     allow_failures:
         # Do a PEP8 test with pycodestyle
