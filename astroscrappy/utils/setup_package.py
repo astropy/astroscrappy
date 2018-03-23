@@ -68,21 +68,22 @@ def get_extensions():
     include_dirs = ['numpy', UTIL_DIR]
 
     libraries = []
-
+    if 'CFLAGS' in os.environ:
+        extra_compile_args = os.environ['CFLAGS'].split()
+    else:
+        extra_compile_args = ['-g', '-O3', '-funroll-loops','-ffast-math']
     ext_med = Extension(name=str('astroscrappy.utils.median_utils'),
                     sources=med_sources,
                     include_dirs=include_dirs,
                     libraries=libraries,
                     language="c",
-                    extra_compile_args=['-g', '-O3', '-funroll-loops',
-                                        '-ffast-math'])
+                    extra_compile_args=extra_compile_args)
     ext_im = Extension(name=str("astroscrappy.utils.image_utils"),
                     sources=im_sources,
                     include_dirs=include_dirs,
                     libraries=libraries,
                     language="c",
-                    extra_compile_args=['-g', '-O3', '-funroll-loops',
-                                        '-ffast-math'])
+                    extra_compile_args=extra_compile_args)
 
     has_openmp, outputs = check_openmp()
     if has_openmp:
