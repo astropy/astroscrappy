@@ -73,16 +73,12 @@ def get_extensions():
                     sources=med_sources,
                     include_dirs=include_dirs,
                     libraries=libraries,
-                    language="c",
-                    extra_compile_args=['-g', '-O3', '-funroll-loops',
-                                        '-ffast-math'])
+                    language="c")
     ext_im = Extension(name=str("astroscrappy.utils.image_utils"),
                     sources=im_sources,
                     include_dirs=include_dirs,
                     libraries=libraries,
-                    language="c",
-                    extra_compile_args=['-g', '-O3', '-funroll-loops',
-                                        '-ffast-math'])
+                    language="c")
 
     has_openmp, outputs = check_openmp()
     if has_openmp:
