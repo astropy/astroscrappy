@@ -478,24 +478,28 @@ PyMedFilt5(float* data, float* output, int nx, int ny)
         "PyMedFilt5(data, output, nx, ny) -> void\n\n"
             "Calculate the 5x5 median filter on an array data with dimensions "
             "nx x ny. The results are saved in the output array. The output "
-            "array should already be allocated as we work on it in place. The "
-            "median filter is not calculated for a 2 pixel border around the "
-            "image. These pixel values are copied from the input data. Note "
-            "that the data array needs to be striped in the x direction such "
-            "that pixel i,j has memory location data[i + nx * j]");
+            "array should already be allocated as we work on it in place. "
+            "At each border of the image, the median window is completed by "
+            "replicating the edge row or column. Note that the data array "
+            "needs to be striped in the x direction such that pixel i,j has "
+            "memory location data[i + nx * j]");
 
     /*Total size of the array */
     int nxny = nx * ny;
 
     /* Loop indices */
     int i, j, nxj;
-    int k, l, nxk;
+    int k, l, nxk, ipl, rci;
 
     /* 25 element array to calculate the median and a counter index. Note that
      * these both need to be unique for each thread so they both need to be
      * private and we wait to allocate memory until the pragma below. */
     float* medarr;
     int medcounter;
+
+    /* End rows & columns for special treatment */
+    int cols[] = {0, 1, nx-2, nx-1};
+    int rows[] = {0, 1, ny-2, ny-1};
 
     /* Each thread needs to access the data and the output so we make them
      * firstprivate. We make sure that our algorithm doesn't have multiple
@@ -529,22 +533,73 @@ PyMedFilt5(float* data, float* output, int nx, int ny)
         free(medarr);
     }
 
-#pragma omp parallel firstprivate(output, data, nx, nxny) private(i)
-    /* Copy the border pixels from the original data into the output array */
-    for (i = 0; i < nx; i++) {
-        output[i] = data[i];
-        output[i + nx] = data[i + nx];
-        output[nxny - nx + i] = data[nxny - nx + i];
-        output[nxny - nx - nx + i] = data[nxny - nx - nx + i];
+#pragma omp parallel firstprivate(output, data, nx, ny, rows) \
+    private(i, j, k, l, ipl, rci, medarr, nxj, nxk, medcounter)
+    {
+        /*Each thread allocates its own array. */
+        medarr = (float *) malloc(25 * sizeof(float));
+
+        /* Pad the input array with the nearest value for border pixels (as
+           in the original IRAF algorithm). I'm not sure how thread-optimized
+           this is after my changes but it only happens for a small number of
+           rows/columns - JT.
+        */
+#pragma omp for nowait
+        for (rci = 0; rci < 4; rci++) {
+            j = rows[rci];
+            nxj = nx * j;
+            for (i = 0; i < nx; i++) {
+                medcounter = 0;
+                for (k = -2; k < 3; k++) {
+                    if (j+k < 0) nxk = -nxj;
+                    else if (j+k >= ny) nxk = nx * (ny-j-1);
+                    else nxk = nx * k;
+                    for (l = -2; l < 3; l++) {
+		        ipl = i+l;
+                        if (ipl < 1) ipl = 0;
+		        else if (ipl >= nx) ipl = nx-1;
+                        medarr[medcounter] = data[nxj + nxk + ipl];
+                        medcounter++;
+                    }
+                }
+                output[nxj + i] = PyOptMed25(medarr);
+	    }
+        }
+        /* Each thread needs to free its own copy of medarr */
+        free(medarr);
     }
 
-#pragma omp parallel firstprivate(output, data, nx, ny) private(j, nxj)
-    for (j = 0; j < ny; j++) {
-        nxj = nx * j;
-        output[nxj] = data[nxj];
-        output[nxj + 1] = data[nxj + 1];
-        output[nxj + nx - 1] = data[nxj + nx - 1];
-        output[nxj + nx - 2] = data[nxj + nx - 2];
+#pragma omp parallel firstprivate(output, data, nx, ny, cols)	\
+  private(i, j, k, l, ipl, rci, medarr, nxj, nxk, medcounter)
+    {
+        /*Each thread allocates its own array. */
+        medarr = (float *) malloc(25 * sizeof(float));
+
+#pragma omp for nowait
+        for (j = 0; j < ny; j++) {
+          nxj = nx * j;
+
+            for (rci = 0; rci < 4; rci++) {
+                i = cols[rci];
+                medcounter = 0;
+
+                for (k = -2; k < 3; k++) {
+                    if (j+k < 0) nxk = -nxj;
+                    else if (j+k >= ny) nxk = nx * (ny-j-1);
+                    else nxk = nx * k;
+                    for (l = -2; l < 3; l++) {
+		        ipl = i+l;
+                        if (ipl < 1) ipl = 0;
+		        else if (ipl >= nx) ipl = nx-1;
+                        medarr[medcounter] = data[nxj + nxk + ipl];
+                        medcounter++;
+                    }
+                }
+                output[nxj + i] = PyOptMed25(medarr);
+	    }
+        }
+        /* Each thread needs to free its own copy of medarr */
+        free(medarr);
     }
 
     return;
