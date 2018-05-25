@@ -58,10 +58,6 @@ def test_medfilt3():
 def test_medfilt5():
     a = np.ascontiguousarray(np.random.random((1001, 1001))).astype('f4')
     npmed5 = ndimage.filters.median_filter(a, size=(5, 5), mode='nearest')
-    npmed5[:2, :] = a[:2, :]
-    npmed5[-2:, :] = a[-2:, :]
-    npmed5[:, :2] = a[:, :2]
-    npmed5[:, -2:] = a[:, -2:]
 
     med5 = medfilt5(a)
     assert np.all(med5 == npmed5)
