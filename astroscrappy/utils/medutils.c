@@ -555,21 +555,21 @@ PyMedFilt5(float* data, float* output, int nx, int ny)
                     else if (j+k >= ny) nxk = nx * (ny-j-1);
                     else nxk = nx * k;
                     for (l = -2; l < 3; l++) {
-		        ipl = i+l;
+                        ipl = i+l;
                         if (ipl < 1) ipl = 0;
-		        else if (ipl >= nx) ipl = nx-1;
+                        else if (ipl >= nx) ipl = nx-1;
                         medarr[medcounter] = data[nxj + nxk + ipl];
                         medcounter++;
                     }
                 }
                 output[nxj + i] = PyOptMed25(medarr);
-	    }
+            }
         }
         /* Each thread needs to free its own copy of medarr */
         free(medarr);
     }
 
-#pragma omp parallel firstprivate(output, data, nx, ny, cols)	\
+#pragma omp parallel firstprivate(output, data, nx, ny, cols) \
   private(i, j, k, l, ipl, rci, medarr, nxj, nxk, medcounter)
     {
         /*Each thread allocates its own array. */
@@ -588,15 +588,15 @@ PyMedFilt5(float* data, float* output, int nx, int ny)
                     else if (j+k >= ny) nxk = nx * (ny-j-1);
                     else nxk = nx * k;
                     for (l = -2; l < 3; l++) {
-		        ipl = i+l;
+                        ipl = i+l;
                         if (ipl < 1) ipl = 0;
-		        else if (ipl >= nx) ipl = nx-1;
+                        else if (ipl >= nx) ipl = nx-1;
                         medarr[medcounter] = data[nxj + nxk + ipl];
                         medcounter++;
                     }
                 }
                 output[nxj + i] = PyOptMed25(medarr);
-	    }
+            }
         }
         /* Each thread needs to free its own copy of medarr */
         free(medarr);
