@@ -484,7 +484,9 @@ PyMedFilt5(float* data, float* output, int nx, int ny)
             "needs to be striped in the x direction such that pixel i,j has "
             "memory location data[i + nx * j]");
 
-    return PyMedFiltN(data, output, nx, ny, 5);
+    PyMedFiltN(data, output, nx, ny, 5);
+
+    return;
 
 }
 
