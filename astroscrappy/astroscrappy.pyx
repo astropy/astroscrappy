@@ -528,11 +528,11 @@ cdef void clean_medmask(float[:, ::1] cleanarr, bool[:, ::1] crmask,
                     for l in range(-2, 3):
                         j1 = j + l
                         if (j1 < 0): j1 = 0
-                        elif (j1 > ny): j1 = ny
+                        elif (j1 >= ny): j1 = ny-1
                         for k in range(-2, 3):
                             i1 = i + k
                             if (i1 < 0): i1 = 0
-                            elif (i1 > nx): i1 = nx
+                            elif (i1 >= nx): i1 = nx-1
                             badpixel = crmask[j1, i1]
                             badpixel = badpixel or mask[j1, i1]
                             if not badpixel:
