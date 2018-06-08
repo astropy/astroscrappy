@@ -483,7 +483,8 @@ cdef void clean_medmask(float[:, ::1] cleanarr, bool[:, ::1] crmask,
                         bool[:, ::1] mask, int nx, int ny,
                         float background_level):
     """clean_medmask(cleanarr, crmask, mask, nx, ny, background_level)\n
-    Clean the bad pixels in cleanarr using a 5x5 masked median filter.
+    Clean the bad pixels in cleanarr using a 5x5 masked median filter, with
+    edge rows/columns replicated to complete the window.
 
     Parameters
     ----------
@@ -509,27 +510,33 @@ cdef void clean_medmask(float[:, ::1] cleanarr, bool[:, ::1] crmask,
         Average value of the background. This value will be used if there are
         no good pixels in a 5x5 region.
     """
-    # Go through all of the pixels, ignore the borders
-    cdef int k, l, i, j, numpix
+    # Go through all of the pixels
+    cdef int k, l, i, j, i1, j1, numpix
     cdef float * medarr
     cdef bool badpixel
 
     # For each pixel
     with nogil, parallel():
         medarr = < float * > malloc(25 * sizeof(float))
-        for j in prange(2, ny - 2):
-            for i in range(2, nx - 2):
+        for j in prange(0, ny):
+            for i in range(0, nx):
                 # if the pixel is in the crmask
                 if crmask[j, i]:
                     numpix = 0
                     # median the 25 pixels around the pixel ignoring
                     # any pixels that are masked
                     for l in range(-2, 3):
+                        j1 = j + l
+                        if (j1 < 0): j1 = 0
+                        elif (j1 > ny): j1 = ny
                         for k in range(-2, 3):
-                            badpixel = crmask[j + l, i + k]
-                            badpixel = badpixel or mask[j + l, i + k]
+                            i1 = i + k
+                            if (i1 < 0): i1 = 0
+                            elif (i1 > nx): i1 = nx
+                            badpixel = crmask[j1, i1]
+                            badpixel = badpixel or mask[j1, i1]
                             if not badpixel:
-                                medarr[numpix] = cleanarr[j + l, i + k]
+                                medarr[numpix] = cleanarr[j1, i1]
                                 numpix = numpix + 1
 
                     # if the pixels count is 0 then put in the background
