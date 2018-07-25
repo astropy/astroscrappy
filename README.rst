@@ -57,6 +57,10 @@ This follows the astropy.io.fits (pyfits) convention.
 scipy is required for certain tests to pass, but the code itself does not depend on
 scipy.
 
+.. image:: https://readthedocs.org/projects/astroscrappy/badge/?version=latest
+    :alt: Documentation Status
+    :scale: 100%
+    :target: https://astroscrappy.readthedocs.io/en/latest/?badge=latest
 .. image:: https://travis-ci.org/astropy/astroscrappy.png
     :target: https://travis-ci.org/astropy/astroscrappy
 .. image:: https://coveralls.io/repos/astropy/astroscrappy/badge.png
