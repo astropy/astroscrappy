@@ -1,13 +1,20 @@
 Astro-SCRAPPY: The Speedy Cosmic Ray Annihilation Package in Python
 ===================================================================
 
-Name : Astro-SCRAPPY
+.. image:: https://readthedocs.org/projects/astroscrappy/badge/?version=latest
+    :alt: Documentation Status
+    :scale: 100%
+    :target: https://astroscrappy.readthedocs.io/en/latest/?badge=latest
+.. image:: https://travis-ci.org/astropy/astroscrappy.png
+    :target: https://travis-ci.org/astropy/astroscrappy
+.. image:: https://coveralls.io/repos/astropy/astroscrappy/badge.png
+    :target: https://coveralls.io/r/astropy/astroscrappy
+    :alt: Travis Status
 
-Author : Curtis McCully
+An optimized cosmic ray detector.
 
-Date : October 2014
+:Author: Curtis McCully
 
-Optimized cosmic ray detector
 
 Astro-SCRAPPY is designed to detect cosmic rays in images (numpy arrays),
 based on Pieter van Dokkum's L.A.Cosmic algorithm.
@@ -57,15 +64,6 @@ This follows the astropy.io.fits (pyfits) convention.
 scipy is required for certain tests to pass, but the code itself does not depend on
 scipy.
 
-.. image:: https://readthedocs.org/projects/astroscrappy/badge/?version=latest
-    :alt: Documentation Status
-    :scale: 100%
-    :target: https://astroscrappy.readthedocs.io/en/latest/?badge=latest
-.. image:: https://travis-ci.org/astropy/astroscrappy.png
-    :target: https://travis-ci.org/astropy/astroscrappy
-.. image:: https://coveralls.io/repos/astropy/astroscrappy/badge.png
-    :target: https://coveralls.io/r/astropy/astroscrappy
-    :alt: Travis Status
 
 License
 -------

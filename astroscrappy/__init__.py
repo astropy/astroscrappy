@@ -4,11 +4,9 @@
 Astro-SCRAPPY: The Speedy Cosmic Ray Annihilation Package in Python
 ===================================================================
 
-Name : Astro-SCRAPPY
-Author : Curtis McCully
-Date : October 2014
+An optimized cosmic ray detector
 
-Optimized Cosmic Ray Detector:
+:Author: Curtis McCully
 
 Astro-SCRAPPY is designed to detect cosmic rays in images (numpy arrays),
 originally based on Pieter van Dokkum's L.A.Cosmic algorithm.
