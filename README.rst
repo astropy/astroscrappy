@@ -10,6 +10,9 @@ Astro-SCRAPPY: The Speedy Cosmic Ray Annihilation Package in Python
 .. image:: https://coveralls.io/repos/astropy/astroscrappy/badge.png
     :target: https://coveralls.io/r/astropy/astroscrappy
     :alt: Travis Status
+.. image:: https://zenodo.org/badge/36837126.svg
+    :target: https://zenodo.org/badge/latestdoi/36837126
+    
 
 An optimized cosmic ray detector.
 
@@ -24,8 +27,7 @@ I have ported all of the slow functions to Cython/C, and optimized
 where I can. This is designed to be as fast as possible so some of the
 readability has been sacrificed, specifically in the C code.
 
-If you use this code, please consider adding this repository address in a
-footnote: https://github.com/astropy/astroscrappy
+If you use this code, please cite the Zendo DOI: https://zenodo.org/record/1482019
 
 Please cite the original paper which can be found at:
 http://www.astro.yale.edu/dokkum/lacosmic/
