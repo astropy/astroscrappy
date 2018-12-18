@@ -6,7 +6,7 @@ include ah_bootstrap.py
 include setup.cfg
 include astroscrappy/tests/coveragerc
 
-recursive-include astroscrappy *.pyx *.c *.pxd
+recursive-include astroscrappy *.pyx *.c *.pxd *.h
 
 recursive-include docs *
 recursive-include licenses *
