@@ -7,7 +7,7 @@ import subprocess
 from distutils.core import Extension
 from distutils import log
 
-from astropy_helpers import setup_helpers
+from extension_helpers import setup_helpers
 
 UTIL_DIR = os.path.relpath(os.path.dirname(__file__))
 
