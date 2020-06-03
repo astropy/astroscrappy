@@ -2,8 +2,6 @@
 # cython: profile=True, boundscheck=False, nonecheck=False, wraparound=False
 # cython: cdivision=True, linetrace=True
 # distutils: define_macros=CYTHON_TRACE=1
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
 """
 Name : median_utils
 Author : Curtis McCully
