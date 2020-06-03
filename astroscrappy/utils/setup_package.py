@@ -1,6 +1,7 @@
 import os
 import sys
 import subprocess
+import numpy as np
 
 from distutils.core import Extension
 from distutils import log
@@ -63,7 +64,7 @@ def get_extensions():
     im_sources = [str(os.path.join(UTIL_DIR, "image_utils.pyx")),
                   str(os.path.join(UTIL_DIR, "imutils.c"))]
 
-    include_dirs = ['numpy', UTIL_DIR]
+    include_dirs = [np.get_include(), UTIL_DIR]
 
     libraries = []
     if 'CFLAGS' in os.environ:
