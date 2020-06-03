@@ -1,3 +1,4 @@
+# cython: language_level=3
 """
 Header file for Cython functions in the utils package.
 
