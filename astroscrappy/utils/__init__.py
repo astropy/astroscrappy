@@ -7,10 +7,10 @@ These include fast implementations for calculating the median,
 median filters, and other image operations.
 """
 
-from .median_utils import *
-from .image_utils import *
+from .median_utils import *  # noqa
+from .image_utils import *  # noqa
 
-__all__ = ['median', 'optmed3', 'optmed5', 'optmed7', 'optmed9',
+__all__ = ['median', 'optmed3', 'optmed5', 'optmed7', 'optmed9',  # noqa
            'optmed25', 'medfilt3', 'medfilt5', 'medfilt7',
            'sepmedfilt3', 'sepmedfilt5', 'sepmedfilt7', 'sepmedfilt9',
            'subsample', 'rebin', 'convolve', 'laplaceconvolve',
