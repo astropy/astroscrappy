@@ -6,7 +6,7 @@ import numpy as np
 from distutils.core import Extension
 from distutils import log
 
-from extension_helpers import setup_helpers
+from extension_helpers import get_compiler
 
 UTIL_DIR = os.path.relpath(os.path.dirname(__file__))
 
@@ -38,7 +38,7 @@ sys.exit(int(has_omp_functions & fopenmp_flag_works))
 
 
 def check_openmp():
-    if setup_helpers.get_compiler_option() == 'msvc':
+    if get_compiler() == 'msvc':
         # The free version of the Microsoft compilers supports
         # OpenMP in MSVC 2008 (python 2.7) and MSVC 2015 (python 3.5+),
         # but not MSVC 2010 (python 3.4 and lower).
@@ -70,23 +70,23 @@ def get_extensions():
     if 'CFLAGS' in os.environ:
         extra_compile_args = os.environ['CFLAGS'].split()
     else:
-        extra_compile_args = ['-g', '-O3', '-funroll-loops','-ffast-math']
+        extra_compile_args = ['-g', '-O3', '-funroll-loops', '-ffast-math']
     ext_med = Extension(name=str('astroscrappy.utils.median_utils'),
-                    sources=med_sources,
-                    include_dirs=include_dirs,
-                    libraries=libraries,
-                    language="c",
-                    extra_compile_args=extra_compile_args)
+                        sources=med_sources,
+                        include_dirs=include_dirs,
+                        libraries=libraries,
+                        language="c",
+                        extra_compile_args=extra_compile_args)
     ext_im = Extension(name=str("astroscrappy.utils.image_utils"),
-                    sources=im_sources,
-                    include_dirs=include_dirs,
-                    libraries=libraries,
-                    language="c",
-                    extra_compile_args=extra_compile_args)
+                       sources=im_sources,
+                       include_dirs=include_dirs,
+                       libraries=libraries,
+                       language="c",
+                       extra_compile_args=extra_compile_args)
 
     has_openmp, outputs = check_openmp()
     if has_openmp:
-        if setup_helpers.get_compiler_option() == 'msvc':
+        if get_compiler() == 'msvc':
             ext_med.extra_compile_args.append('-openmp')
             ext_im.extra_compile_args.append('-openmp')
         else:
