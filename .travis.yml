@@ -154,6 +154,9 @@ script:
     - tox $TOXARGS -- $TOXPOSARGS
 
 after_success:
-    # If coveralls.io is set up for this package, uncomment the line below.
-    # The coveragerc file may be customized as needed for your package.
-    - if [[ $SETUP_CMD == 'test --coverage' ]]; then coveralls --rcfile='astroscrappy/tests/coveragerc'; fi
+    # If coveralls.io is set up for this package, uncomment the two lines below.
+    pip install coveralls
+    coveralls
+    # If codecov is set up for this package, uncomment the two lines below
+    # pip install codecov
+    # codecov
