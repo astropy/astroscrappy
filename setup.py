@@ -9,9 +9,6 @@ import sys
 
 from setuptools import setup
 
-from extension_helpers import get_extensions
-
-
 # First provide helpful messages if contributors try and run legacy commands
 # for tests or docs.
 
@@ -75,6 +72,9 @@ try:
 except Exception:
     version = '{version}'
 """.lstrip()
+
+# Import this later to allow checking deprecated options before
+from extension_helpers import get_extensions  # noqa
 
 setup(use_scm_version={'write_to': os.path.join('astroscrappy', 'version.py'),
                        'write_to_template': VERSION_TEMPLATE},
