@@ -75,7 +75,19 @@ except Exception:
 
 # Import this later to allow checking deprecated options before
 from extension_helpers import get_extensions  # noqa
+from Cython.Build import cythonize  # noqa
+
+ext_modules = get_extensions()
+compiler_directives = {}
+
+if os.getenv('COVERAGE'):
+    print('Adding linetrace directive')
+    compiler_directives['profile'] = True
+    compiler_directives['linetrace'] = True
+    os.environ['CFLAGS'] = '-DCYTHON_TRACE=1'
+
+ext_modules = cythonize(ext_modules, compiler_directives=compiler_directives)
 
 setup(use_scm_version={'write_to': os.path.join('astroscrappy', 'version.py'),
                        'write_to_template': VERSION_TEMPLATE},
-      ext_modules=get_extensions())
+      ext_modules=ext_modules)
