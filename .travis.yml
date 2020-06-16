@@ -138,6 +138,16 @@ matrix:
           stage: Initial tests
           env: TOXENV=codestyle
 
+before_install:
+
+    - if [[ $TOXENV == *-cov ]]; then
+        export TOXPOSARGS=$TOXPOSARGS" --cov-report=xml:"$TRAVIS_BUILD_DIR"/coverage.xml";
+      fi
+
+    - echo "TOXENV="$TOXENV
+    - echo "TOXARGS="$TOXARGS
+    - echo "TOXPOSARGS="$TOXPOSARGS
+
 install:
 
     # We now use the ci-helpers package to set up our Python environment
@@ -155,9 +165,11 @@ script:
     - tox $TOXARGS -- $TOXPOSARGS
 
 after_success:
-    # If coveralls.io is set up for this package, uncomment the two lines below.
-    # - pip install coveralls
-    # - coveralls
-    # If codecov is set up for this package, uncomment the two lines below
-    - pip install codecov
-    - codecov
+    - if [[ $TOXENV == *-cov ]]; then
+      # If coveralls.io is set up for this package, uncomment the two lines below.
+      # pip install coveralls;
+      # coveralls;
+      # If codecov is set up for this package, uncomment the two lines below
+      pip install codecov;
+      codecov;
+    fi
