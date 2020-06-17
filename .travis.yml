@@ -7,6 +7,11 @@ git:
 os:
     - linux
 
+# Cache can be cleared from the travis settings menu, see docs currently at
+# https://docs.travis-ci.com/user/caching#Clearing-Caches
+cache:
+  - ccache
+
 # The apt packages below are needed for sphinx builds. A full list of packages
 # that can be included can be found here:
 #

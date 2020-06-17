@@ -7,12 +7,12 @@ Astro-SCRAPPY: The Speedy Cosmic Ray Annihilation Package in Python
     :target: https://astroscrappy.readthedocs.io/en/latest/?badge=latest
 .. image:: https://travis-ci.org/astropy/astroscrappy.png
     :target: https://travis-ci.org/astropy/astroscrappy
-.. image:: https://coveralls.io/repos/astropy/astroscrappy/badge.png
-    :target: https://coveralls.io/r/astropy/astroscrappy
-    :alt: Travis Status
+.. image:: https://codecov.io/gh/astropy/astroscrappy/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/astropy/astroscrappy
+    :alt: AstroScrappy's Coverage Status
 .. image:: https://zenodo.org/badge/36837126.svg
     :target: https://zenodo.org/badge/latestdoi/36837126
-    
+
 
 An optimized cosmic ray detector.
 
