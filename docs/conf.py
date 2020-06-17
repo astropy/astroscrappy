@@ -25,27 +25,19 @@
 # Thus, any C-extensions that are needed to build the documentation will *not*
 # be accessible, and the documentation will not build correctly.
 
-import datetime
 import os
 import sys
+import datetime
+from importlib import import_module
 
 try:
-    import astropy_helpers
+    from sphinx_astropy.conf.v1 import *  # noqa
 except ImportError:
-    # Building from inside the docs/ directory?
-    if os.path.basename(os.getcwd()) == 'docs':
-        a_h_path = os.path.abspath(os.path.join('..', 'astropy_helpers'))
-        if os.path.isdir(a_h_path):
-            sys.path.insert(1, a_h_path)
-
-# Load all of the global Astropy configuration
-from astropy_helpers.sphinx.conf import *
+    print('ERROR: the documentation requires the sphinx-astropy package to be installed')
+    sys.exit(1)
 
 # Get configuration information from setup.cfg
-try:
-    from ConfigParser import ConfigParser
-except ImportError:
-    from configparser import ConfigParser
+from configparser import ConfigParser
 conf = ConfigParser()
 
 conf.read([os.path.join(os.path.dirname(__file__), '..', 'setup.cfg')])
@@ -75,7 +67,7 @@ rst_epilog += """
 # -- Project information ------------------------------------------------------
 
 # This does not *have* to match the package name, but typically does
-project = setup_cfg['package_name']
+project = setup_cfg['name']
 author = setup_cfg['author']
 copyright = '{0}, {1}'.format(
     datetime.datetime.now().year, setup_cfg['author'])
@@ -84,8 +76,8 @@ copyright = '{0}, {1}'.format(
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 
-__import__(setup_cfg['package_name'])
-package = sys.modules[setup_cfg['package_name']]
+import_module(setup_cfg['name'])
+package = sys.modules[setup_cfg['name']]
 
 # The short X.Y version.
 version = package.__version__.split('-', 1)[0]
@@ -118,7 +110,6 @@ html_theme_options = {
     'logotext2': 'scrappy',  # orange, light
     'logotext3': ':docs'   # white,  light
     }
-
 
 
 # Custom sidebar templates, maps document names to template names.
@@ -163,15 +154,12 @@ man_pages = [('index', project.lower(), project + u' Documentation',
 
 # -- Options for the edit_on_github extension ---------------------------------
 
-if eval(setup_cfg.get('edit_on_github')):
-    extensions += ['astropy_helpers.sphinx.ext.edit_on_github']
+if setup_cfg.get('edit_on_github').lower() == 'true':
 
-    versionmod = __import__(setup_cfg['package_name'] + '.version')
+    extensions += ['sphinx_astropy.ext.edit_on_github']
+
     edit_on_github_project = setup_cfg['github_project']
-    if versionmod.version.release:
-        edit_on_github_branch = "v" + versionmod.version.version
-    else:
-        edit_on_github_branch = "master"
+    edit_on_github_branch = "master"
 
     edit_on_github_source_root = ""
     edit_on_github_doc_root = "docs"
@@ -179,3 +167,28 @@ if eval(setup_cfg.get('edit_on_github')):
 # -- Resolving issue number to links in changelog -----------------------------
 github_issues_url = 'https://github.com/{0}/issues/'.format(setup_cfg['github_project'])
 
+# -- Turn on nitpicky mode for sphinx (to warn about references not found) ----
+#
+# nitpicky = True
+# nitpick_ignore = []
+#
+# Some warnings are impossible to suppress, and you can list specific references
+# that should be ignored in a nitpick-exceptions file which should be inside
+# the docs/ directory. The format of the file should be:
+#
+# <type> <class>
+#
+# for example:
+#
+# py:class astropy.io.votable.tree.Element
+# py:class astropy.io.votable.tree.SimpleElement
+# py:class astropy.io.votable.tree.SimpleElementWithContent
+#
+# Uncomment the following lines to enable the exceptions:
+#
+# for line in open('nitpick-exceptions'):
+#     if line.strip() == "" or line.startswith("#"):
+#         continue
+#     dtype, target = line.split(None, 1)
+#     target = target.strip()
+#     nitpick_ignore.append((dtype, six.u(target)))

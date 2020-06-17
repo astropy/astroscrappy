@@ -1,6 +1,4 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
 import numpy as np
 
 
@@ -10,7 +8,7 @@ def gaussian(image_shape, x0, y0, brightness, fwhm):
     y = np.arange(image_shape[0])
     x2d, y2d = np.meshgrid(x, y)
 
-    sig = fwhm  / 2.35482
+    sig = fwhm / 2.35482
 
     normfactor = brightness / 2.0 / np.pi * sig ** -2.0
     exponent = -0.5 * sig ** -2.0

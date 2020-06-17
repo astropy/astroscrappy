@@ -61,12 +61,10 @@ scipy.
 # Affiliated packages may add whatever they like to this file, but
 # should keep this content at the top.
 # ----------------------------------------------------------------------------
-from ._astropy_init import *
+from ._astropy_init import *  # noqa
 # ----------------------------------------------------------------------------
 
-# For egg_info test builds to pass, put package imports here.
-if not _ASTROPY_SETUP_:
-    from .astroscrappy import *
-    from .utils import *
+from .astroscrappy import *  # noqa
+from .utils import *  # noqa
 
-__all__ = ['detect_cosmics']
+__all__ = ['detect_cosmics']  # noqa
