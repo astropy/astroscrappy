@@ -40,6 +40,9 @@ env:
         # overridden underneath. They are defined here in order to save having
         # to repeat them for all configurations.
 
+        # By default, we run our jobs with tox.
+        - SETUP_METHOD='tox'
+
         # The following three variables are for tox. TOXENV is a standard
         # variable that tox uses to determine the environment to run,
         # TOXARGS are arguments passed to tox, and TOXPOSARGS are arguments
@@ -77,8 +80,7 @@ matrix:
           name: Python 3.8 with required dependencies and measure coverage
           stage: Initial tests
           # CFLAGS='--coverage'
-          env: TOXENV=py38-test-cov
-               COVERAGE=1
+          env: SETUP_METHOD='pip'
 
         # Check for sphinx doc build warnings
         - os: linux
@@ -167,8 +169,14 @@ install:
       fi
 
 script:
-    - pip install tox
-    - tox $TOXARGS -- $TOXPOSARGS
+    - if [ $SETUP_METHOD == 'tox' ]; then
+        pip install tox;
+        tox $TOXARGS -- $TOXPOSARGS;
+      else
+        pip install Cython extension-helpers numpy;
+        COVERAGE=1 pip install -e .[test];
+        pytest --pyargs astroscrappy docs --cov astroscrappy;
+      fi
 
 after_success:
     - if [[ $TOXENV == *-cov ]]; then
