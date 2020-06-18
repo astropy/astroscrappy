@@ -76,8 +76,8 @@ matrix:
           python: 3.8
           name: Python 3.8 with required dependencies and measure coverage
           stage: Initial tests
+          # CFLAGS='--coverage'
           env: TOXENV=py38-test-cov
-               CFLAGS='--coverage'
                COVERAGE=1
 
         # Check for sphinx doc build warnings
