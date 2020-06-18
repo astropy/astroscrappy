@@ -80,7 +80,7 @@ matrix:
           name: Python 3.8 with required dependencies and measure coverage
           stage: Initial tests
           # CFLAGS='--coverage'
-          env: SETUP_METHOD='pip'
+          env: SETUP_METHOD='cov'
 
         # Check for sphinx doc build warnings
         - os: linux
@@ -179,7 +179,7 @@ script:
       fi
 
 after_success:
-    - if [[ $TOXENV == *-cov ]]; then
+    - if [ $SETUP_METHOD == 'cov' ]; then
         pip install codecov;
         codecov;
       fi
