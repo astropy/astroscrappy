@@ -84,7 +84,7 @@ if os.getenv('COVERAGE'):
     print('Adding linetrace directive')
     compiler_directives['profile'] = True
     compiler_directives['linetrace'] = True
-    os.environ['CFLAGS'] = '-DCYTHON_TRACE=1 --coverage -fno-inline-functions -O0'
+    os.environ['CFLAGS'] = '-DCYTHON_TRACE_NOGIL=1 --coverage -fno-inline-functions -O0'
 
 ext_modules = cythonize(ext_modules, compiler_directives=compiler_directives)
 
