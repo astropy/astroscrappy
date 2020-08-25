@@ -200,6 +200,7 @@ def detect_cosmics(indat, inmask=None, bkg=None, var=None, float sigclip=4.5,
     # Set the initial values to those of the data array
     cleanarr[:, :] = indat[:, :]
 
+    bkg = np.ascontiguousarray(bkg)
     # Setup the mask
     if inmask is None:
         # By default don't mask anything
@@ -215,10 +216,12 @@ def detect_cosmics(indat, inmask=None, bkg=None, var=None, float sigclip=4.5,
     # Copy any noise estimates so we can clean them like the data, otherwise
     # use the main data array instead.
     if var is None:
-        cleanvar = cleanarr + readnoise * readnoise
+        if bkg is None:
+            clean_var = cleanarr + readnoise * readnoise
+        else:
+            clean_var = cleanarr - bkg + readnoise * readnoise
     else:
-        cleanvar = np.empty((ny, nx), dtype=np.float32, order='C')
-        cleanvar[:, :] = var[:, :] * gain
+        clean_var = (var - bkg) * gain
 
     # Find the saturated stars and add them to the mask
     update_mask(np.asarray(cleanarr), np.asarray(mask), satlevel, sepmed)
@@ -238,7 +241,7 @@ def detect_cosmics(indat, inmask=None, bkg=None, var=None, float sigclip=4.5,
     # Get the default background level for large cosmic rays.
     background_level = median(gooddata, len(gooddata))
     goodvar = np.empty_like(gooddata, order='c')
-    goodvar[:] = cleanvar[np.logical_not(mask)]
+    goodvar[:] = clean_var[np.logical_not(mask)]
     background_var_level = median(goodvar, len(goodvar))
     del goodvar
     del gooddata
@@ -292,12 +295,14 @@ def detect_cosmics(indat, inmask=None, bkg=None, var=None, float sigclip=4.5,
         # noise in a pixel *should* be, rather than what it actually is after
         # a cosmic ray hit.
         if sepmed:
-            m5 = sepmedfilt7(cleanvar)
+            m5 = sepmedfilt7(clean_var)
         else:
-            m5 = medfilt5(cleanvar)
+            m5 = medfilt5(clean_var)
 
         # Clip noise so that we can take a square root
         m5[m5 < 0.00001] = 0.00001
+        if bkg is not None:
+            m5 += bkg
         noise = np.sqrt(m5)
         del m5
 
@@ -387,19 +392,19 @@ def detect_cosmics(indat, inmask=None, bkg=None, var=None, float sigclip=4.5,
         if cleantype == 'median':
             # Unmasked median filter
             clean_median(cleanarr, crmask, nx, ny)
-            clean_median(cleanvar, crmask, nx, ny)
+            clean_median(clean_var, crmask, nx, ny)
         # Masked mean filter
         elif cleantype == 'meanmask':
             clean_meanmask(cleanarr, crmask, mask, nx, ny, background_level)
-            clean_meanmask(cleanvar, crmask, mask, nx, ny, background_var_level)
+            clean_meanmask(clean_var, crmask, mask, nx, ny, background_var_level)
         # Masked median filter
         elif cleantype == 'medmask':
             clean_medmask(cleanarr, crmask, mask, nx, ny, background_level)
-            clean_medmask(cleanvar, crmask, mask, nx, ny, background_var_level)
+            clean_medmask(clean_var, crmask, mask, nx, ny, background_var_level)
         # Inverse distance weighted interpolation
         elif cleantype == 'idw':
             clean_idwinterp(cleanarr, crmask, mask, nx, ny, background_level)
-            clean_idwinterp(cleanvar, crmask, mask, nx, ny, background_var_level)
+            clean_idwinterp(clean_var, crmask, mask, nx, ny, background_var_level)
         else:
             raise ValueError("""cleantype must be one of the following values:
                             [median, meanmask, medmask, idw]""")
