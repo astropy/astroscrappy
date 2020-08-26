@@ -200,7 +200,8 @@ def detect_cosmics(indat, inmask=None, bkg=None, var=None, float sigclip=4.5,
     # Set the initial values to those of the data array
     cleanarr[:, :] = indat[:, :]
 
-    bkg = np.ascontiguousarray(bkg)
+    if bkg is not None:
+        bkg = np.ascontiguousarray(bkg)
     # Setup the mask
     if inmask is None:
         # By default don't mask anything
@@ -219,7 +220,7 @@ def detect_cosmics(indat, inmask=None, bkg=None, var=None, float sigclip=4.5,
         if bkg is None:
             clean_var = cleanarr + readnoise * readnoise
         else:
-            clean_var = cleanarr - bkg + readnoise * readnoise
+            clean_var = cleanarr - bkg * gain + readnoise * readnoise
     else:
         clean_var = (var - bkg) * gain
 
@@ -302,7 +303,7 @@ def detect_cosmics(indat, inmask=None, bkg=None, var=None, float sigclip=4.5,
         # Clip noise so that we can take a square root
         m5[m5 < 0.00001] = 0.00001
         if bkg is not None:
-            m5 += bkg
+            m5 += bkg * gain
         noise = np.sqrt(m5)
         del m5
 
