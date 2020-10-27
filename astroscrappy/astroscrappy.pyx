@@ -300,10 +300,10 @@ def detect_cosmics(indat, inmask=None, bkg=None, var=None, float sigclip=4.5,
         else:
             m5 = medfilt5(clean_var)
 
-        # Clip noise so that we can take a square root
-        m5[m5 < 0.00001] = 0.00001
         if bkg is not None:
             m5 += bkg * gain
+        # Clip noise so that we can take a square root
+        m5[m5 < 0.00001] = 0.00001
         noise = np.sqrt(m5)
         del m5
 
