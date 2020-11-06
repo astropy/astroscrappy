@@ -12,7 +12,7 @@ on:
 
 jobs:
   tests:
-    name: ${{ matrix.os }}, ${{ matrix.tox_env }}, ${{ matrix.name }}
+    name: ${{ matrix.name }} (${{ matrix.os }}, ${{ matrix.toxenv }})
     runs-on: ${{ matrix.os }}
     if: "!(contains(github.event.head_commit.message, '[skip ci]') || contains(github.event.head_commit.message, '[ci skip]'))"
     strategy:
@@ -71,7 +71,7 @@ jobs:
     - name: Install dependencies
       run: python -m pip install tox
     - name: Install graphviz dependency
-      if: "endsWith(matrix.tox_env, 'build_docs')"
+      if: "endsWith(matrix.toxenv, 'build_docs')"
       run: sudo apt-get -y install graphviz
     - name: Run tests
       if: "! matrix.coverage"
