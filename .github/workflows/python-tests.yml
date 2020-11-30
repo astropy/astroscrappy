@@ -81,9 +81,9 @@ jobs:
       run: |
         pip install Cython extension-helpers numpy
         COVERAGE=1 pip install -e .[test]
-        pytest --pyargs astroscrappy docs --cov astroscrappy --cov-report=xml:coverage.xml
+        pytest --pyargs astroscrappy docs --cov astroscrappy
     - name: Upload coverage to codecov
       if: "matrix.coverage"
-      uses: codecov/codecov-action@v1
-      with:
-        file: ./coverage.xml
+      run: |
+        pip install codecov
+        codecov
