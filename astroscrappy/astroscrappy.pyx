@@ -53,7 +53,7 @@ def detect_cosmics(indat, inmask=None, inbkg=None, invar=None, float sigclip=4.5
         Input data array that will be used for cosmic ray detection. This
         should include the sky background (or a mean background level, added
         back in after sky subtraction), so that noise can be estimated
-        correctly from the data values.
+        correctly from the data values. This should be in units of "counts".
 
     inmask : boolean numpy array, optional
         Input bad pixel mask. Values of True will be ignored in the cosmic ray
