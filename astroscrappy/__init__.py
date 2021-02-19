@@ -18,8 +18,7 @@ readability has been sacrificed, specifically in the C code.
 
 L.A.Cosmic = LAplacian Cosmic ray detection
 
-If you use this code, please consider adding this repository address in a
-footnote: https://github.com/astropy/astroscrappy.
+If you use this code, please cite the Zendo DOI: https://zenodo.org/record/1482019
 
 Please cite the original paper which can be found at:
 http://www.astro.yale.edu/dokkum/lacosmic/
