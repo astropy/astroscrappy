@@ -23,8 +23,8 @@ def test_gmos():
         sky = hdul['SKYFIT'].data
 
     m1, _ = detect_cosmics(data, readnoise=4.24, gain=1.933)
-    m2, _ = detect_cosmics(data, bkg=sky, readnoise=4.24, gain=1.933)
-    m3, _ = detect_cosmics(data, bkg=sky, var=var, readnoise=4.24, gain=1.933)
+    m2, _ = detect_cosmics(data, inbkg=sky, readnoise=4.24, gain=1.933)
+    m3, _ = detect_cosmics(data, inbkg=sky, var=var, readnoise=4.24, gain=1.933)
 
     cosmic1 = (slice(41, 72), slice(142, 161))
     cosmic2 = (slice(117, 147), slice(35, 43))
