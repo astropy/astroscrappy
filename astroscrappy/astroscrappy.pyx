@@ -216,9 +216,9 @@ def detect_cosmics(indat, inmask=None, inbkg=None, invar=None, float sigclip=4.5
     # Copy any noise estimates so we can clean them like the data, otherwise
     # use the main data array instead.
     if invar is not None and inbkg is not None:
-        clean_var = invar * gain * gain - bkg
+        clean_var = invar * (gain * gain) - bkg
     elif invar is not None and inbkg is None:
-        clean_var = invar * gain * gain
+        clean_var = invar * (gain * gain)
     elif invar is None and inbkg is not None:
         clean_var = cleanarr - bkg + readnoise * readnoise
     else:
