@@ -1,5 +1,7 @@
-1.1 (unreleased)
-----------------
+1.1.0 (2020-08-01)
+------------------
+- Added the option to add a variance array
+- Added the ability to subtract a background array rather than a single value.
 
 1.0.5 (2016-08-16)
 ------------------
