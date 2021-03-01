@@ -417,7 +417,7 @@ def detect_cosmics(indat, inmask=None, inbkg=None, invar=None, float sigclip=4.5
 
     cleanarr /= gain
 
-    return crmask.astype(np.bool), cleanarr
+    return crmask.astype(np.bool_), cleanarr
 
 
 def update_mask(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] data,
