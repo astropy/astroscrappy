@@ -1,6 +1,5 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
-# cython: boundscheck=False, nonecheck=False, wraparound=False
-# cython: language_level=3, cdivision=True
+# cython: boundscheck=False, nonecheck=False, wraparound=False, language_level=3, cdivision=True
 """
 Name : image_utils
 Author : Curtis McCully
