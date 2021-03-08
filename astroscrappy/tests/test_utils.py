@@ -139,7 +139,7 @@ def test_sepmedfilt9():
 
 def test_dilate5():
     # Put 5% of the pixels into a mask
-    a = np.zeros((1001, 1001), dtype=np.bool)
+    a = np.zeros((1001, 1001), dtype=bool)
     a[np.random.random((1001, 1001)) < 0.05] = True
     kernel = np.ones((5, 5))
     kernel[0, 0] = 0
@@ -147,7 +147,7 @@ def test_dilate5():
     kernel[4, 0] = 0
     kernel[4, 4] = 0
     # Make a zero padded array for the numpy version to operate
-    paddeda = np.zeros((1005, 1005), dtype=np.bool)
+    paddeda = np.zeros((1005, 1005), dtype=bool)
     paddeda[2:-2, 2:-2] = a[:, :]
     npdilate = binary_dilation(np.ascontiguousarray(paddeda),
                                structure=kernel, iterations=2)
@@ -158,7 +158,7 @@ def test_dilate5():
 
 def test_dilate3():
     # Put 5% of the pixels into a mask
-    a = np.zeros((1001, 1001), dtype=np.bool)
+    a = np.zeros((1001, 1001), dtype=bool)
     a[np.random.random((1001, 1001)) < 0.05] = True
     kernel = np.ones((3, 3))
     npgrow = binary_dilation(np.ascontiguousarray(a),
