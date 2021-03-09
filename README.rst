@@ -8,7 +8,7 @@ Astro-SCRAPPY: The Speedy Cosmic Ray Annihilation Package in Python
 .. image:: https://github.com/astropy/astroscrappy/workflows/Run%20unit%20tests/badge.svg
     :target: https://github.com/astropy/astroscrappy/actions
     :alt: CI Status
-.. image:: https://codecov.io/gh/astropy/astroscrappy/branch/master/graph/badge.svg
+.. image:: https://codecov.io/gh/astropy/astroscrappy/branch/main/graph/badge.svg
     :target: https://codecov.io/gh/astropy/astroscrappy
     :alt: AstroScrappy's Coverage Status
 .. image:: https://zenodo.org/badge/36837126.svg
