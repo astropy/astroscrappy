@@ -38,8 +38,9 @@ jobs:
           python-version: '3.8'
 
       - name: Build sdist
-        run:  pip install Cython extension-helpers numpy
-              python setup.py sdist
+        run:  |
+          pip install Cython extension-helpers numpy
+          python setup.py sdist
 
       - uses: actions/upload-artifact@v2
         with:
