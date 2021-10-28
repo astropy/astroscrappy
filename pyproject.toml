@@ -10,5 +10,5 @@ requires = ["setuptools",
 build-backend = 'setuptools.build_meta'
 
 [[tool.cibuildwheel.overrides]]
-select = "pp3.7-macosx*"
+select = "pp37-macosx*"
 before-build = "pip install -y numpy==1.18"
