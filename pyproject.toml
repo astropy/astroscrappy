@@ -11,4 +11,4 @@ build-backend = 'setuptools.build_meta'
 
 [[tool.cibuildwheel.overrides]]
 select = "pp37-macosx*"
-before-build = "pip install -y numpy==1.18"
+before-build = "pip install numpy==1.18"
