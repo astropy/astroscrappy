@@ -9,6 +9,6 @@ requires = ["setuptools",
 
 build-backend = 'setuptools.build_meta'
 
-[[tool.cibuildwheel.overrides]]
-select = "pp37-macosx*"
-before-build = "brew install openblas && pip install numpy==1.18"
+[tool.cibuildwheel]
+# Skip pypy on mac due to numpy/accelerate issues
+skip = "pp37-macosx_x86_64"
