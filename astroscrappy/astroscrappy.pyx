@@ -1,6 +1,5 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
-# cython: boundscheck=False, nonecheck=False, wraparound=False
-# cython: language_level=3, cdivision=True
+# cython: boundscheck=False, nonecheck=False, wraparound=False, language_level=3, cdivision=True
 """
 Name : astroscrappy: The Speedy Cosmic Ray Annihilation Package in Python
 Author : Curtis McCully
@@ -417,7 +416,7 @@ def detect_cosmics(indat, inmask=None, inbkg=None, invar=None, float sigclip=4.5
 
     cleanarr /= gain
 
-    return crmask.astype(np.bool), cleanarr
+    return crmask.astype(np.bool_), cleanarr
 
 
 def update_mask(np.ndarray[np.float32_t, ndim=2, mode='c', cast=True] data,

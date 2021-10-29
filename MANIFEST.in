@@ -5,7 +5,9 @@ include LICENSE.rst
 include pyproject.toml
 include astroscrappy/tests/coveragerc
 
-recursive-include astroscrappy *.pyx *.c *.pxd *.h
+recursive-exclude . astroscrappy.c
+recursive-exclude astroscrappy/utils image_utils.c median_utils.c
+recursive-include astroscrappy *.pyx *.pxd
 recursive-include docs *
 recursive-include licenses *
 recursive-include scripts *
