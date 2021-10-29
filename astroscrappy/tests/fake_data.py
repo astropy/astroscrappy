@@ -60,6 +60,6 @@ def make_fake_data():
     imdata = imdata.astype('f4')
 
     # Make a mask where the detected cosmic rays should be
-    crmask = np.zeros((1001, 1001), dtype=np.bool)
+    crmask = np.zeros((1001, 1001), dtype=bool)
     crmask[cr_y, cr_x] = True
     return imdata, crmask
