@@ -6,9 +6,6 @@ on:
     branches: [ master ]
     tags:
   workflow_dispatch:
-  schedule:
-    # Run every Sunday at 03:53 UTC
-    - cron: 11 2 * * 0
 
 jobs:
   tests:
