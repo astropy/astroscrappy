@@ -11,6 +11,6 @@ build-backend = 'setuptools.build_meta'
 
 [tool.cibuildwheel]
 # Skip pypy on mac due to numpy/accelerate issues
-skip = "pp37-macosx_x86_64"
+skip = "pp37* cp36*"
 test-requires = "pytest scipy"
-test-command = "pytest $(dirname $(python -c 'import astroscrappy; print(astroscrappy.__file__)'))"
+test-command = "pytest --pyargs astroscrappy"
