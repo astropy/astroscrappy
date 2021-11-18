@@ -8,3 +8,9 @@ requires = ["setuptools",
             "Cython>=0.29.21,<3.0"]
 
 build-backend = 'setuptools.build_meta'
+
+[tool.cibuildwheel]
+# Skip pypy on mac due to numpy/accelerate issues
+skip = "pp37* cp36* cp310-win* cp310-manylinux_x86_64 cp*-manylinux_i686 *musllinux*"
+test-requires = "pytest scipy"
+test-command = "pytest --pyargs astroscrappy"
