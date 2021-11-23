@@ -1,10 +1,17 @@
-1.1.0 (2020-11-01)
+1.2.0.dev (unreleased)
+----------------------
+
+- Drop support for Python 3.6.
+
+1.1.0 (2021-11-19)
 ------------------
+
 - Added the option to add a variance array
 - Added the ability to subtract a background array rather than a single value.
 
 1.0.5 (2016-08-16)
 ------------------
+
 - Updated to newest version of astropy package template.
 
 - Fixed median cleaning. There was a subtle bug that the crmask was defined as a unit8
