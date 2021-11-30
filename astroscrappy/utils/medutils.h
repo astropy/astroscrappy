@@ -77,6 +77,17 @@ PyMedFilt5(float* data, float* output, int nx, int ny);
 void
 PyMedFilt7(float* data, float* output, int nx, int ny);
 
+/* Calculate the NxN median filter on an array with dimensions nx x ny,
+ * using a window size of N=wsize (which must be an odd number). The
+ * results are saved in the output array. The output array should already
+ * be allocated, as we work on it in place. At each border of the image,
+ * the median window is completed by replicating the edge row or
+ * column. Note that the data array needs to be striped in the x direction
+ * such that pixel i,j has memory location data[i + nx * j].
+ */
+void
+PyMedFiltN(float* data, float* output, int nx, int ny, int wsize);
+
 /* Calculate the 3x3 separable median filter of an array data that has
  * dimensions nx x ny. The results are saved in the output array. The output
  * array should already be allocated as we work on it in place. The median

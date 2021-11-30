@@ -44,10 +44,6 @@ def test_optmed25():
 def test_medfilt3():
     a = np.ascontiguousarray(np.random.random((1001, 1001))).astype('f4')
     npmed3 = ndimage.filters.median_filter(a, size=(3, 3), mode='nearest')
-    npmed3[:1, :] = a[:1, :]
-    npmed3[-1:, :] = a[-1:, :]
-    npmed3[:, :1] = a[:, :1]
-    npmed3[:, -1:] = a[:, -1:]
 
     med3 = medfilt3(a)
     assert np.all(med3 == npmed3)
@@ -56,10 +52,6 @@ def test_medfilt3():
 def test_medfilt5():
     a = np.ascontiguousarray(np.random.random((1001, 1001))).astype('f4')
     npmed5 = ndimage.filters.median_filter(a, size=(5, 5), mode='nearest')
-    npmed5[:2, :] = a[:2, :]
-    npmed5[-2:, :] = a[-2:, :]
-    npmed5[:, :2] = a[:, :2]
-    npmed5[:, -2:] = a[:, -2:]
 
     med5 = medfilt5(a)
     assert np.all(med5 == npmed5)
@@ -68,10 +60,6 @@ def test_medfilt5():
 def test_medfilt7():
     a = np.ascontiguousarray(np.random.random((1001, 1001))).astype('f4')
     npmed7 = ndimage.filters.median_filter(a, size=(7, 7), mode='nearest')
-    npmed7[:3, :] = a[:3, :]
-    npmed7[-3:, :] = a[-3:, :]
-    npmed7[:, :3] = a[:, :3]
-    npmed7[:, -3:] = a[:, -3:]
 
     med7 = medfilt7(a)
     assert np.all(med7 == npmed7)
