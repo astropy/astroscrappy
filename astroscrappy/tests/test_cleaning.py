@@ -14,6 +14,7 @@ def test_median_clean():
     _mask, clean = detect_cosmics(imdata, readnoise=10., gain=1.0,
                                   sigclip=6, sigfrac=1.0, cleantype='median')
 
+    print(_mask.sum())
     assert (clean[crmask] != imdata[crmask]).sum() == crmask.sum()
 
     # Run it again on the clean data. We shouldn't find any new cosmic rays

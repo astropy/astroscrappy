@@ -88,4 +88,4 @@ jobs:
     - name: Install dependencies for Python 3.8
       run: /opt/python/cp38-cp38/bin/pip install tox
     - name: Run tests for Python 3.8
-      run: /opt/python/cp38-cp38/bin/python -m tox -v -e py38-test
+      run: /opt/python/cp38-cp38/bin/python -m tox -v -e py38-test -- -sv
