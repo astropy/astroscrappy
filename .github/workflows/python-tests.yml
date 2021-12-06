@@ -75,7 +75,7 @@ jobs:
         pip install codecov
         codecov
 
-  32bit:
+  tests-32bit:
     name: 32-bit
     runs-on: ubuntu-latest
     container:
