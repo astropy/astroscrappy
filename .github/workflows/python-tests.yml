@@ -81,8 +81,9 @@ jobs:
     container:
       image: quay.io/pypa/manylinux1_i686
     steps:
+    # TODO: Use newer checkout actions when https://github.com/actions/checkout/issues/334 fixed
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v1
       with:
         fetch-depth: 0
     - name: Install dependencies for Python 3.8
