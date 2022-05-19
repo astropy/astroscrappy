@@ -37,12 +37,14 @@ def make_fake_data():
     # Add sky and sky noise
     imdata += 200
 
+    psf_sigma = 3.5
+
     # Add some fake sources
     for i in range(100):
         x = np.random.uniform(low=0.0, high=1001)
         y = np.random.uniform(low=0.0, high=1001)
         brightness = np.random.uniform(low=1000., high=30000.)
-        imdata += gaussian(imdata.shape, x, y, brightness, 3.5)
+        imdata += gaussian(imdata.shape, x, y, brightness, psf_sigma)
 
     # Add the poisson noise
     imdata = np.float32(np.random.poisson(imdata))

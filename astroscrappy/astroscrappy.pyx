@@ -126,7 +126,7 @@ def detect_cosmics(indat, inmask=None, inbkg=None, invar=None, float sigclip=4.5
         Method to build the fine structure image:\n
         'median': Use the median filter in the standard LA Cosmic algorithm
         'convolve': Convolve the image with the psf kernel to calculate the
-        fine structure image.
+        fine structure image using a matched filter technique.
         Default: 'median'.
 
     psfmodel : {'gauss', 'gaussx', 'gaussy', 'moffat'}, optional
@@ -259,6 +259,8 @@ def detect_cosmics(indat, inmask=None, inbkg=None, invar=None, float sigclip=4.5
             psfk = moffatkernel(psffwhm, psfbeta, psfsize)
         else:
             raise ValueError('Please choose a supported PSF model.')
+        # Reverse the psf kernel as that is what we use in the convolution throughout
+        psfk[:, :] = psfk[::-1, ::-1]
 
     # Define a cosmic ray mask
     # This is what will be returned at the end
@@ -321,9 +323,19 @@ def detect_cosmics(indat, inmask=None, inbkg=None, invar=None, float sigclip=4.5
         sp = s - sp
         del s
 
+        # Find the candidate cosmic rays
+        goodpix = np.logical_not(mask)
+        cosmics = np.logical_and(sp > sigclip, goodpix)
+
         # Build the fine structure image :
+        # TODO: we can gain a reasonable performance boost if we only calculate the fine structure stuff for cosmic
+        # pixels instead of the whole image
         if fsmode == 'convolve':
-            f = convolve(cleanarr, psfk)
+            # Use a match filter, the (reversed) psf convolved with the image / variance
+            f = convolve(cleanarr / noise / noise, psfk)
+            # Normalize by the sum of the weights to get the flux of the source assuming it was actually a psf.
+            # This will pull the value of pixels that do not look like psfs (e.g. CRs) down.
+            f = f / convolve(1.0 / noise / noise, psfk)
         elif fsmode == 'median':
             if sepmed:
                 f = sepmedfilt5(cleanarr)
@@ -347,9 +359,6 @@ def detect_cosmics(indat, inmask=None, inbkg=None, invar=None, float sigclip=4.5
         del m7
         del noise
 
-        # Find the candidate cosmic rays
-        goodpix = np.logical_not(mask)
-        cosmics = np.logical_and(sp > sigclip, goodpix)
         # S' / F is still not exactly what is in the paper as we have subtracted the "sampling flux" from S
         # via the median filter. This should be an optimization because we have removed the smooth component
         # and are therefore comparing the candidate "CR flux" only.

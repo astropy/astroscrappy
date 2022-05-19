@@ -2,12 +2,15 @@
 ----------------------
 
 - Drop support for Python 3.6.
+- Change to normalization for convolution fine structure method to instead use a matched filter.
 
 1.1.0 (2021-11-19)
 ------------------
 
 - Added the option to add a variance array
 - Added the ability to subtract a background array rather than a single value.
+- To accommodate these changes, we now return the cleaned array in the same units as the user provides, ADU rather than
+  electrons and with the background included.
 
 1.0.5 (2016-08-16)
 ------------------
