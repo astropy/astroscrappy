@@ -1,5 +1,6 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 # cython: boundscheck=False, nonecheck=False, wraparound=False, language_level=3, cdivision=True
+# distutils: define_macros=NPY_NO_DEPRECATED_API=NPY_1_7_API_VERSION
 """
 Name : astroscrappy: The Speedy Cosmic Ray Annihilation Package in Python
 Author : Curtis McCully
@@ -688,7 +689,7 @@ cdef void clean_idwinterp(float[:, ::1] cleanarr, bool[:, ::1] crmask,
         no good pixels in a 5x5 region.
     """
 
-    # Go through all of the pixels, ignore the borders
+    # Go through all the pixels, ignore the borders
     cdef int i, j, k, l
     cdef float f11, f12, f21, f22 = background_level
     cdef int x1, x2, y1, y2
