@@ -37,15 +37,6 @@
 void
 PySubsample(float* data, float* output, int nx, int ny)
 {
-    PyDoc_STRVAR(PySubsample__doc__,
-        "PySubample(data, output, nx, ny) -> void\n\n"
-            "Subsample an array 2x2 given an input array data with size "
-            "nx x ny.The results are saved in the output array. The output "
-            "array should already be allocated as we work on it in place. Each"
-            " pixel is replicated into 4 pixels; no averaging is performed. "
-            "Data should be striped in the x direction such that the memory "
-            "location of pixel i,j is data[nx *j + i].");
-
     /* Precalculate the new length; minor optimization */
     int padnx = 2 * nx;
 
@@ -80,16 +71,6 @@ PySubsample(float* data, float* output, int nx, int ny)
 void
 PyRebin(float* data, float* output, int nx, int ny)
 {
-    PyDoc_STRVAR(PyRebin__doc__,
-        "PyRebin(data, output, nx, ny) -> void\n    \n"
-            "Rebin an array 2x2, with size (2 * nx) x (2 * ny). Rebin the "
-            "array by block averaging 4 pixels back into 1. This is "
-            "effectively the opposite of subsample (although subsample does "
-            "not do an average). The results are saved in the output array. "
-            "The output array should already be allocated as we work on it in "
-            "place. Data should be striped in the x direction such that the "
-            "memory location of pixel i,j is data[nx *j + i].");
-
     /* Size of original array */
     int padnx = nx * 2;
 
@@ -127,15 +108,6 @@ void
 PyConvolve(float* data, float* kernel, float* output, int nx, int ny,
            int kernx, int kerny)
 {
-    PyDoc_STRVAR(PyConvolve__doc__,
-        "PyConvolve(data, kernel, output, nx, ny, kernx, kerny) -> void\n\n"
-            "Convolve an image of size nx x ny with a a kernel of size "
-            "kernx x kerny. The results are saved in the output array. The "
-            "output array should already be allocated as we work on it in "
-            "place. Data and kernel should both be striped along the x "
-            "direction such that the memory location of pixel i,j is "
-            "data[nx *j + i].");
-
     /* Get the width of the borders that we will pad with zeros */
     int bnx = (kernx - 1) / 2;
     int bny = (kerny - 1) / 2;
@@ -229,18 +201,6 @@ PyConvolve(float* data, float* kernel, float* output, int nx, int ny,
 void
 PyLaplaceConvolve(float* data, float* output, int nx, int ny)
 {
-    PyDoc_STRVAR(PyLaplaceConvolve__doc__,
-        "PyLaplaceConvolve(data, output, nx, ny) -> void\n\n"
-            "Convolve an image of size nx x ny the following kernel:\n"
-            " 0 -1  0\n"
-            "-1  4 -1\n"
-            " 0 -1  0\n"
-            "This is a discrete version of the Laplacian operator. The results"
-            " are saved in the output array. The output array should already "
-            "be allocated as we work on it in place.Data should be striped in "
-            "the x direction such that the memory location of pixel i,j is "
-            "data[nx *j + i].");
-
     /* Precompute the total number of pixels in the image */
     int nxny = nx * ny;
 
@@ -344,29 +304,29 @@ static inline bool dilate_3(bool* data, int i, int nxj, int nx){
 static inline bool dilate_5(bool* data, int i, int nxj, int nx){
     bool p = dilate_3(data, i, nxj, nx);
     /* Right 2 */
-    p = p || padarr[i + 4 + padnxj];
+    p = p || data[i + 4 + nxj];
     /* Left 2 */
-    p = p || padarr[i + padnxj];
+    p = p || data[i + nxj];
     /* Up 2 */
-    p = p || padarr[i + 2 + padnx + padnx + padnxj];
+    p = p || data[i + 2 + nx + nx + nxj];
     /* Down 2 */
-    p = p || padarr[i + 2 - padnx - padnx + padnxj];
+    p = p || data[i + 2 - nx - nx + nxj];
     /* Right 2 Up 1 */
-    p = p || padarr[i + 4 + padnx + padnxj];
+    p = p || data[i + 4 + nx + nxj];
     /* Right 2 Down 1 */
-    p = p || padarr[i + 4 - padnx + padnxj];
+    p = p || data[i + 4 - nx + nxj];
     /* Left 2 Up 1 */
-    p = p || padarr[i + padnx + padnxj];
+    p = p || data[i + nx + nxj];
     /* Left 2 Down 1 */
-    p = p || padarr[i - padnx + padnxj];
+    p = p || data[i - nx + nxj];
     /* Up 2 Right 1 */
-    p = p || padarr[i + 3 + padnx + padnx + padnxj];
+    p = p || data[i + 3 + nx + nx + nxj];
     /* Up 2 Left 1 */
-    p = p || padarr[i + 1 + padnx + padnx + padnxj];
+    p = p || data[i + 1 + nx + nx + nxj];
     /* Down 2 Right 1 */
-    p = p || padarr[i + 3 - padnx - padnx + padnxj];
+    p = p || data[i + 3 - nx - nx + nxj];
     /* Down 2 Left 1 */
-    p = p || padarr[i + 1 - padnx - padnx + padnxj];
+    p = p || data[i + 1 - nx - nx + nxj];
 
     return p;
 }
@@ -388,13 +348,14 @@ static inline void dilate_edge_columns_3(bool* data, bool* output, int nx, int n
 }
 
 static inline void dilate_edge_columns_5(bool* data, bool* output, int nx, int nxj){
-    dilate_edge_columns_3(data, output, nx, nxj)
+    dilate_edge_columns_3(data, output, nx, nxj);
     output[nxj + 1] = data[nxj + 1];
     output[nxj + nx - 2] = data[nxj + nx - 2];
 }
 
 static inline void dilate(bool* data, bool* output, int nx, int ny, bool dilate_function(bool*, int, int, int),
-    void dilate_edge_rows, void dilate_edge_columns)
+    void dilate_edge_rows(bool*, bool*, int, int, int), void dilate_edge_columns(bool*, bool*, int, int))
+{
     /* Precompute the total number of pixels; minor optimization */
     int nxny = nx * ny;
 
@@ -446,7 +407,7 @@ static inline void dilate(bool* data, bool* output, int nx, int ny, bool dilate_
 void
 PyDilate3(bool* data, bool* output, int nx, int ny)
 {
-    dilate(data, output, nx, ny, dilate_3, dilate_edge_rows_3, dilate_edge_columns_3)
+    dilate(data, output, nx, ny, dilate_3, dilate_edge_rows_3, dilate_edge_columns_3);
 }
 
 /* Do niter iterations of boolean dilation on an array of size nx x ny. The
@@ -467,5 +428,5 @@ PyDilate3(bool* data, bool* output, int nx, int ny)
 void
 PyDilate5(bool* data, bool* output, int niter, int nx, int ny)
 {
-    dilate(data, output, nx, ny, dilate_5, dilate_edge_rows, dilate_edge_columns)
+    dilate(data, output, nx, ny, dilate_5, dilate_edge_rows_5, dilate_edge_columns_5);
 }

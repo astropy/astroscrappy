@@ -481,13 +481,11 @@ static inline void median_filter(float* data, float* output, int nx, int ny,
 
     /* Loop indices */
     int i, j, nxj;
-    int k, l, nxk;
 
     /* 25 element array to calculate the median and a counter index. Note that
      * these both need to be unique for each thread so they both need to be
      * private and we wait to allocate memory until the pragma below. */
     float* medarr;
-    int medcounter;
 
     /* Each thread needs to access the data and the output so we make them
      * firstprivate. We make sure that our algorithm doesn't have multiple
@@ -715,7 +713,7 @@ static inline void separable_median_filter(float* data, float* output, int nx, i
     /* Fill in the borders of rowmed with the original data values */
 #pragma omp parallel for firstprivate(rowmed, data, nx, ny) private(j, nxj)
     for (j = 0; j < ny; j++) {
-        edge_column_function(data, rowmed, j, nx)
+        edge_column_function(data, rowmed, j, nx, nxny);
     }
 
     /* Median filter the columns */
