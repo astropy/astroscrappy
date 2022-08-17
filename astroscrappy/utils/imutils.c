@@ -117,8 +117,6 @@ PyConvolve(float* data, float* kernel, float* output, int nx, int ny,
     int padny = ny + kerny - 1;
     /* Get the total number of pixels in the padded array */
     int padnxny = padnx * padny;
-    /*Get the total number of pixels in the output image */
-    int nxny = nx * ny;
 
     /*Allocate the padded array */
     float* padarr = (float *) malloc(padnxny * sizeof(float));
@@ -365,8 +363,7 @@ static inline void dilate(uint8_t* data, uint8_t* output, int nx, int ny, uint8_
     /* Pixel value p. Each thread needs its own unique copy of this so we don't
      initialize this until the pragma below. */
 
-#pragma omp parallel for firstprivate(output, data, nxny, nx, ny) \
-    private(i, j, nxj, p)
+#pragma omp parallel for firstprivate(output, data, nxny, nx, ny) private(i, j, nxj)
 
     /* Loop through all of the pixels excluding the border */
     for (j = 1; j < ny - 1; j++) {
