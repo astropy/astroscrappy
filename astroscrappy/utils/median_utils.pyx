@@ -63,8 +63,8 @@ def median(np.ndarray[np.float32_t, mode='c', cast=True] a, int n):
 cdef float cymedian(float* a, int n) noexcept nogil:
     """cymedian(a, n)\n
     Cython function to calculate the median without requiring the GIL.
-    :param a:
-    :param n:
+    :param a: float array to median
+    :param n: int length of the array
     :return:
     """
     cdef float med = 0.0
