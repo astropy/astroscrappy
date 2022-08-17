@@ -319,6 +319,116 @@ PyLaplaceConvolve(float* data, float* output, int nx, int ny)
     return;
 }
 
+static inline bool dilate_3(bool* data, int i, int nxj, int nx){
+    /* Start in the middle and work out */
+    bool p = data[i + nxj];
+    /* Right 1 */
+    p = p || data[i + 1 + nxj];
+    /* Left 1 */
+    p = p || data[i - 1 + nxj];
+    /* Up 1 */
+    p = p || data[i + nx + nxj];
+    /* Down 1 */
+    p = p || data[i - nx + nxj];
+    /* Up 1 Right 1 */
+    p = p || data[i + 1 + nx + nxj];
+    /* Up 1 Left 1 */
+    p = p || data[i - 1 + nx + nxj];
+    /* Down 1 Right 1 */
+    p = p || data[i + 1 - nx + nxj];
+    /* Down 1 Left 1 */
+    p = p || data[i - 1 - nx + nxj];
+    return p;
+}
+
+static inline bool dilate_5(bool* data, int i, int nxj, int nx){
+    bool p = dilate_3(data, i, nxj, nx);
+    /* Right 2 */
+    p = p || padarr[i + 4 + padnxj];
+    /* Left 2 */
+    p = p || padarr[i + padnxj];
+    /* Up 2 */
+    p = p || padarr[i + 2 + padnx + padnx + padnxj];
+    /* Down 2 */
+    p = p || padarr[i + 2 - padnx - padnx + padnxj];
+    /* Right 2 Up 1 */
+    p = p || padarr[i + 4 + padnx + padnxj];
+    /* Right 2 Down 1 */
+    p = p || padarr[i + 4 - padnx + padnxj];
+    /* Left 2 Up 1 */
+    p = p || padarr[i + padnx + padnxj];
+    /* Left 2 Down 1 */
+    p = p || padarr[i - padnx + padnxj];
+    /* Up 2 Right 1 */
+    p = p || padarr[i + 3 + padnx + padnx + padnxj];
+    /* Up 2 Left 1 */
+    p = p || padarr[i + 1 + padnx + padnx + padnxj];
+    /* Down 2 Right 1 */
+    p = p || padarr[i + 3 - padnx - padnx + padnxj];
+    /* Down 2 Left 1 */
+    p = p || padarr[i + 1 - padnx - padnx + padnxj];
+
+    return p;
+}
+
+static inline void dilate_edge_rows_3(bool* data, bool* output, int i, int nx, int nxny){
+    output[i] = data[i];
+    output[nxny - nx + i] = data[nxny - nx + i];
+}
+
+static inline void dilate_edge_rows_5(bool* data, bool* output, int i, int nx, int nxny){
+    dilate_edge_rows_3(data, output, i, nx, nxny);
+    output[i + nx] = data[i + nx];
+    output[nxny - nx - nx + i] = data[nxny - nx - nx + i];
+}
+
+static inline void dilate_edge_columns_3(bool* data, bool* output, int nx, int nxj){
+    output[nxj] = data[nxj];
+    output[nxj + nx - 1] = data[nxj + nx - 1];
+}
+
+static inline void dilate_edge_columns_5(bool* data, bool* output, int nx, int nxj){
+    dilate_edge_columns_3(data, output, nx, nxj)
+    output[nxj + 1] = data[nxj + 1];
+    output[nxj + nx - 2] = data[nxj + nx - 2];
+}
+
+static inline void dilate(bool* data, bool* output, int nx, int ny, bool dilate_function(bool*, int, int, int),
+    void dilate_edge_rows, void dilate_edge_columns)
+    /* Precompute the total number of pixels; minor optimization */
+    int nxny = nx * ny;
+
+    /* Loop variables */
+    int i, j, nxj;
+
+    /* Pixel value p. Each thread needs its own unique copy of this so we don't
+     initialize this until the pragma below. */
+
+#pragma omp parallel for firstprivate(output, data, nxny, nx, ny) \
+    private(i, j, nxj, p)
+
+    /* Loop through all of the pixels excluding the border */
+    for (j = 1; j < ny - 1; j++) {
+        nxj = nx * j;
+        for (i = 1; i < nx - 1; i++) {
+            output[i + nxj] = dilate_function(data, i, nxj, nx);
+        }
+    }
+
+#pragma omp parallel firstprivate(output, data, nx, nxny) private(i)
+    /* For the borders, copy the data from the input array */
+    for (i = 0; i < nx; i++) {
+        dilate_edge_rows(data, output, i, nx, nxny);
+    }
+#pragma omp parallel firstprivate(output, data, nx, ny) private(j, nxj)
+    for (j = 0; j < ny; j++) {
+        nxj = nx * j;
+        dilate_edge_columns(data, output, nx, nxj);
+    }
+    return;
+}
+
+
 /* Perform a boolean dilation on an array of size nx x ny. The results are
  * saved in the output array. The output array should already be allocated as
  * we work on it in place.
@@ -336,71 +446,7 @@ PyLaplaceConvolve(float* data, float* output, int nx, int ny)
 void
 PyDilate3(bool* data, bool* output, int nx, int ny)
 {
-    PyDoc_STRVAR(PyDilate3__doc__,
-        "PyDilate3(data, output, nx, ny) -> void\n\n"
-            "Perform a boolean dilation on an array of size nx x ny. The "
-            "results are saved in the output array which should already be "
-            "allocated as we work on it in place. "
-            "Dilation is the boolean equivalent of a convolution but using "
-            "logical or instead of a sum. We apply a 3x3 kernel of all ones. "
-            "Dilation is not computed for a 1 pixel border which is copied "
-            "from the input data. Data should be striped along the x-axis "
-            "such that the location of pixel i,j is data[i + nx * j].");
-
-    /* Precompute the total number of pixels; minor optimization */
-    int nxny = nx * ny;
-
-    /* Loop variables */
-    int i, j, nxj;
-
-    /* Pixel value p. Each thread needs its own unique copy of this so we don't
-     initialize this until the pragma below. */
-    bool p;
-
-#pragma omp parallel for firstprivate(output, data, nxny, nx, ny) \
-    private(i, j, nxj, p)
-
-    /* Loop through all of the pixels excluding the border */
-    for (j = 1; j < ny - 1; j++) {
-        nxj = nx * j;
-        for (i = 1; i < nx - 1; i++) {
-            /*Start in the middle and work out */
-            p = data[i + nxj];
-            /* Right 1 */
-            p = p || data[i + 1 + nxj];
-            /* Left 1 */
-            p = p || data[i - 1 + nxj];
-            /* Up 1 */
-            p = p || data[i + nx + nxj];
-            /* Down 1 */
-            p = p || data[i - nx + nxj];
-            /* Up 1 Right 1 */
-            p = p || data[i + 1 + nx + nxj];
-            /* Up 1 Left 1 */
-            p = p || data[i - 1 + nx + nxj];
-            /* Down 1 Right 1 */
-            p = p || data[i + 1 - nx + nxj];
-            /* Down 1 Left 1 */
-            p = p || data[i - 1 - nx + nxj];
-
-            output[i + nxj] = p;
-        }
-    }
-
-#pragma omp parallel firstprivate(output, data, nx, nxny) private(i)
-    /* For the borders, copy the data from the input array */
-    for (i = 0; i < nx; i++) {
-        output[i] = data[i];
-        output[nxny - nx + i] = data[nxny - nx + i];
-    }
-#pragma omp parallel firstprivate(output, data, nx, ny) private(j, nxj)
-    for (j = 0; j < ny; j++) {
-        nxj = nx * j;
-        output[nxj] = data[nxj];
-        output[nxj - 1 + nx] = data[nxj - 1 + nx];
-    }
-
-    return;
+    dilate(data, output, nx, ny, dilate_3, dilate_edge_rows_3, dilate_edge_columns_3)
 }
 
 /* Do niter iterations of boolean dilation on an array of size nx x ny. The
@@ -421,136 +467,5 @@ PyDilate3(bool* data, bool* output, int nx, int ny)
 void
 PyDilate5(bool* data, bool* output, int niter, int nx, int ny)
 {
-    PyDoc_STRVAR(PyDilate5__doc__,
-        "PyDilate5(data, output, nx, ny) -> void\n\n"
-            "Do niter iterations of boolean dilation on an array of size "
-            "nx x ny. The results are saved in the output array. The output "
-            "array should already be allocated as we work on it in place. "
-            "Dilation is the boolean equivalent of a convolution but using "
-            "logical ors instead of a sum. We apply the following kernel:\n"
-            "0 1 1 1 0\n"
-            "1 1 1 1 1\n"
-            "1 1 1 1 1\n"
-            "1 1 1 1 1\n"
-            "0 1 1 1 0\n"
-            "Data should be striped along the x direction such that the "
-            "location of pixel i,j is data[i + nx * j].");
-
-    /* Pad the array with a border of zeros */
-    int padnx = nx + 4;
-    int padny = ny + 4;
-
-    /* Precompute the total number of pixels; minor optimization */
-    int padnxny = padnx * padny;
-    int nxny = nx * ny;
-
-    /* The padded array to work on */
-    bool* padarr = (bool *) malloc(padnxny * sizeof(bool));
-
-    /*Loop indices */
-    int i, j, nxj, padnxj;
-    int iter;
-
-    /* Pixel value p. This needs to be unique for each thread so we initialize
-     * it below inside the pragma. */
-    bool p;
-
-#pragma omp parallel firstprivate(padarr, padnx, padnxny) private(i)
-    /* Initialize the borders of the padded array to zero */
-    for (i = 0; i < padnx; i++) {
-        padarr[i] = false;
-        padarr[i + padnx] = false;
-        padarr[padnxny - padnx + i] = false;
-        padarr[padnxny - padnx - padnx + i] = false;
-    }
-
-#pragma omp parallel firstprivate(padarr, padnx, padny) private(j, padnxj)
-    for (j = 0; j < padny; j++) {
-        padnxj = padnx * j;
-        padarr[padnxj] = false;
-        padarr[padnxj + 1] = false;
-        padarr[padnxj + padnx - 1] = false;
-        padarr[padnxj + padnx - 2] = false;
-    }
-
-#pragma omp parallel firstprivate(output, data, nxny) private(i)
-    /* Initialize the output array to the input data */
-    for (i = 0; i < nxny; i++) {
-        output[i] = data[i];
-    }
-
-    /* Outer iteration loop */
-    for (iter = 0; iter < niter; iter++) {
-#pragma omp parallel for firstprivate(padarr, output, nx, ny, padnx, iter) \
-    private(nxj, padnxj, i, j)
-        /* Initialize the padded array to the output from the latest
-         * iteration*/
-        for (j = 0; j < ny; j++) {
-            padnxj = padnx * j;
-            nxj = nx * j;
-            for (i = 0; i < nx; i++) {
-                padarr[i + 2 + padnx + padnx + padnxj] = output[i + nxj];
-            }
-        }
-
-        /* Loop over all pixels */
-#pragma omp parallel for firstprivate(padarr, output, nx, ny, padnx, iter) \
-    private(nxj, padnxj, i, j, p)
-        for (j = 0; j < ny; j++) {
-            nxj = nx * j;
-            /* Note the + 2 padding in padnxj */
-            padnxj = padnx * (j + 2);
-            for (i = 0; i < nx; i++) {
-                /* Start with the middle pixel and work out */
-                p = padarr[i + 2 + padnxj];
-                /* Right 1 */
-                p = p || padarr[i + 3 + padnxj];
-                /* Left 1 */
-                p = p || padarr[i + 1 + padnxj];
-                /* Up 1 */
-                p = p || padarr[i + 2 + padnx + padnxj];
-                /* Down 1 */
-                p = p || padarr[i + 2 - padnx + padnxj];
-                /* Up 1 Right 1 */
-                p = p || padarr[i + 3 + padnx + padnxj];
-                /* Up 1 Left 1 */
-                p = p || padarr[i + 1 + padnx + padnxj];
-                /* Down 1 Right 1 */
-                p = p || padarr[i + 3 - padnx + padnxj];
-                /* Down 1 Left 1 */
-                p = p || padarr[i + 1 - padnx + padnxj];
-                /* Right 2 */
-                p = p || padarr[i + 4 + padnxj];
-                /* Left 2 */
-                p = p || padarr[i + padnxj];
-                /* Up 2 */
-                p = p || padarr[i + 2 + padnx + padnx + padnxj];
-                /* Down 2 */
-                p = p || padarr[i + 2 - padnx - padnx + padnxj];
-                /* Right 2 Up 1 */
-                p = p || padarr[i + 4 + padnx + padnxj];
-                /* Right 2 Down 1 */
-                p = p || padarr[i + 4 - padnx + padnxj];
-                /* Left 2 Up 1 */
-                p = p || padarr[i + padnx + padnxj];
-                /* Left 2 Down 1 */
-                p = p || padarr[i - padnx + padnxj];
-                /* Up 2 Right 1 */
-                p = p || padarr[i + 3 + padnx + padnx + padnxj];
-                /* Up 2 Left 1 */
-                p = p || padarr[i + 1 + padnx + padnx + padnxj];
-                /* Down 2 Right 1 */
-                p = p || padarr[i + 3 - padnx - padnx + padnxj];
-                /* Down 2 Left 1 */
-                p = p || padarr[i + 1 - padnx - padnx + padnxj];
-
-                output[i + nxj] = p;
-
-            }
-        }
-
-    }
-    free(padarr);
-
-    return;
+    dilate(data, output, nx, ny, dilate_5, dilate_edge_rows, dilate_edge_columns)
 }
