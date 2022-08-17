@@ -491,7 +491,7 @@ static inline void median_filter(float* data, float* output, int nx, int ny,
      * firstprivate. We make sure that our algorithm doesn't have multiple
      * threads read or write the same piece of memory. */
 #pragma omp parallel firstprivate(output, data, nx, ny, median_function, half_width) \
-    private(i, j, k, l, medarr, nxj, nxk, medcounter)
+    private(i, j, medarr, nxj)
     {
         /*Each thread allocates its own array. */
         medarr = (float *) malloc(filter_size * filter_size * sizeof(float));
