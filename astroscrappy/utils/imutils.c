@@ -329,27 +329,45 @@ static inline bool dilate_5(bool* data, int i, int nxj, int nx){
     return p;
 }
 
+#define EDGE_ROW_3 \
+output[i] = data[i];\
+output[nxny - nx + i] = data[nxny - nx + i]
+
+#define EDGE_ROW_5 \
+output[i + nx] = data[i + nx];\
+output[nxny - nx - nx + i] = data[nxny - nx - nx + i]
+
 static inline void dilate_edge_rows_3(bool* data, bool* output, int i, int nx, int nxny){
-    output[i] = data[i];
-    output[nxny - nx + i] = data[nxny - nx + i];
+    EDGE_ROW_3;
 }
 
 static inline void dilate_edge_rows_5(bool* data, bool* output, int i, int nx, int nxny){
-    dilate_edge_rows_3(data, output, i, nx, nxny);
-    output[i + nx] = data[i + nx];
-    output[nxny - nx - nx + i] = data[nxny - nx - nx + i];
+    EDGE_ROW_3;
+    EDGE_ROW_5;
 }
 
+#undef EDGE_ROW_3
+#undef EDGE_ROW_5
+
+#define EDGE_COLUMN_3 \
+output[nxj] = data[nxj];\
+output[nxj + nx - 1] = data[nxj + nx - 1]
+
+#define EDGE_COLUMN_5 \
+output[nxj + 1] = data[nxj + 1];\
+output[nxj + nx - 2] = data[nxj + nx - 2]
+
 static inline void dilate_edge_columns_3(bool* data, bool* output, int nx, int nxj){
-    output[nxj] = data[nxj];
-    output[nxj + nx - 1] = data[nxj + nx - 1];
+    EDGE_COLUMN_3;
 }
 
 static inline void dilate_edge_columns_5(bool* data, bool* output, int nx, int nxj){
-    dilate_edge_columns_3(data, output, nx, nxj);
-    output[nxj + 1] = data[nxj + 1];
-    output[nxj + nx - 2] = data[nxj + nx - 2];
+    EDGE_COLUMN_3;
+    EDGE_COLUMN_5;
 }
+
+#undef EDGE_COLUMN_3
+#undef EDGE_COLUMN_5
 
 static inline void dilate(bool* data, bool* output, int nx, int ny, bool dilate_function(bool*, int, int, int),
     void dilate_edge_rows(bool*, bool*, int, int, int), void dilate_edge_columns(bool*, bool*, int, int))
@@ -426,4 +444,17 @@ void
 PyDilate5(bool* data, bool* output, int niter, int nx, int ny)
 {
     dilate(data, output, nx, ny, dilate_5, dilate_edge_rows_5, dilate_edge_columns_5);
+    if (niter == 1) {
+    // Short circuit if we are only doing one iteration
+    return;
+    }
+    bool* intermediate = malloc(nx * ny * sizeof(bool));
+    int nxny = nx * ny;
+    for(int i = 1; i < niter; i++){
+        for(int j = 0; j < nxny; j++) {
+            // Copy the last run output into the intermediate array
+            intermediate[j] = output[j];
+        }
+        dilate(intermediate, output, nx, ny, dilate_5, dilate_edge_rows_5, dilate_edge_columns_5);
+    }
 }

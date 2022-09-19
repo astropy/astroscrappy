@@ -60,10 +60,10 @@ scipy.
 # Affiliated packages may add whatever they like to this file, but
 # should keep this content at the top.
 # ----------------------------------------------------------------------------
-from ._astropy_init import *  # noqa
+from astroscrappy._astropy_init import *  # noqa
 # ----------------------------------------------------------------------------
 
-from .astroscrappy import *  # noqa
-from .utils import *  # noqa
+from astroscrappy.astroscrappy import *  # noqa
+from astroscrappy.utils import *  # noqa
 
 __all__ = ['detect_cosmics']  # noqa

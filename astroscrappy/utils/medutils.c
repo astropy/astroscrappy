@@ -383,82 +383,38 @@ static inline void populate_median_array_3(float* medarr, float* data, int half_
 
 #undef MEDIAN_INNER_LOOP
 
-#define EDGE_COLUMN_0 \
+#define EDGE_ROW_0 \
 output[i] = data[i];\
 output[nxny - nx + i] = data[nxny - nx + i]
 
-#define EDGE_COLUMN_1 \
-output[i + nx] = data[i + nx]; \
-output[i + nx + nx] = data[i + nx + nx]
-
-#define EDGE_COLUMN_2 \
-output[nxny - nx - nx + i] = data[nxny - nx - nx + i]; \
-output[nxny - nx - nx - nx + i] = data[nxny - nx - nx - nx + i]
-
-#define EDGE_COLUMN_3 \
-output[nxny - nx - nx - nx + i] = data[nxny - nx - nx - nx + i]; \
-output[nxny - nx - nx - nx - nx + i] = data[nxny - nx - nx - nx - nx + i]
-
-static inline void edge_columns_1(float* data, float* output, int i, int nx, int nxny) {
-    EDGE_COLUMN_0;
-}
-
-static inline void edge_columns_2(float* data, float* output, int i, int nx, int nxny) {
-    EDGE_COLUMN_0;
-    EDGE_COLUMN_1;
-}
-
-static inline void edge_columns_3(float* data, float* output, int i, int nx, int nxny) {
-    EDGE_COLUMN_0;
-    EDGE_COLUMN_1;
-    EDGE_COLUMN_2;
-}
-
-static inline void edge_columns_4(float* data, float* output, int i, int nx, int nxny) {
-    EDGE_COLUMN_0;
-    EDGE_COLUMN_1;
-    EDGE_COLUMN_2;
-    EDGE_COLUMN_3;
-}
-
-#undef EDGE_COLUMN_0
-#undef EDGE_COLUMN_1
-#undef EDGE_COLUMN_2
-#undef EDGE_COLUMN_3
-
-#define EDGE_ROW_0 \
-int nxj = nx * j;\
-output[nxj] = data[nxj]; \
-output[nxj + nx - 1] = data[nxj + nx - 1]
-
 #define EDGE_ROW_1 \
-output[nxj + 1] = data[nxj + 1];\
-output[nxj + nx - 2] = data[nxj + nx - 2]
+output[i + nx] = data[i + nx]; \
+output[nxny - nx - nx + i] = data[nxny - nx - nx + i]
 
 #define EDGE_ROW_2 \
-output[nxj + 2] = data[nxj + 2]; \
-output[nxj + nx - 3] = data[nxj + nx - 3]
+output[i + nx + nx] = data[i + nx + nx]; \
+output[nxny - nx - nx - nx + i] = data[nxny - nx - nx - nx + i]
 
 #define EDGE_ROW_3 \
-output[nxj + 3] = data[nxj + 3]; \
-output[nxj + nx - 4] = data[nxj + nx - 4]
+output[i + nx + nx + nx] = data[i + nx + nx + nx]; \
+output[nxny - nx - nx - nx - nx + i] = data[nxny - nx - nx - nx - nx + i]
 
-static inline void edge_rows_1(float* data, float* output, int j, int nx) {
+static inline void edge_rows_1(float* data, float* output, int i, int nx, int nxny) {
     EDGE_ROW_0;
 }
 
-static inline void edge_rows_2(float* data, float* output, int j, int nx) {
+static inline void edge_rows_2(float* data, float* output, int i, int nx, int nxny) {
     EDGE_ROW_0;
     EDGE_ROW_1;
 }
 
-static inline void edge_rows_3(float* data, float* output, int j, int nx) {
+static inline void edge_rows_3(float* data, float* output, int i, int nx, int nxny) {
     EDGE_ROW_0;
     EDGE_ROW_1;
     EDGE_ROW_2;
 }
 
-static inline void edge_rows_4(float* data, float* output, int j, int nx) {
+static inline void edge_rows_4(float* data, float* output, int i, int nx, int nxny) {
     EDGE_ROW_0;
     EDGE_ROW_1;
     EDGE_ROW_2;
@@ -470,10 +426,54 @@ static inline void edge_rows_4(float* data, float* output, int j, int nx) {
 #undef EDGE_ROW_2
 #undef EDGE_ROW_3
 
+#define EDGE_COLUMN_0 \
+int nxj = nx * j;\
+output[nxj] = data[nxj]; \
+output[nxj + nx - 1] = data[nxj + nx - 1]
+
+#define EDGE_COLUMN_1 \
+output[nxj + 1] = data[nxj + 1];\
+output[nxj + nx - 2] = data[nxj + nx - 2]
+
+#define EDGE_COLUMN_2 \
+output[nxj + 2] = data[nxj + 2]; \
+output[nxj + nx - 3] = data[nxj + nx - 3]
+
+#define EDGE_COLUMN_3 \
+output[nxj + 3] = data[nxj + 3]; \
+output[nxj + nx - 4] = data[nxj + nx - 4]
+
+static inline void edge_columns_1(float* data, float* output, int j, int nx) {
+    EDGE_COLUMN_0;
+}
+
+static inline void edge_columns_2(float* data, float* output, int j, int nx) {
+    EDGE_COLUMN_0;
+    EDGE_COLUMN_1;
+}
+
+static inline void edge_columns_3(float* data, float* output, int j, int nx) {
+    EDGE_COLUMN_0;
+    EDGE_COLUMN_1;
+    EDGE_COLUMN_2;
+}
+
+static inline void edge_columns_4(float* data, float* output, int j, int nx) {
+    EDGE_COLUMN_0;
+    EDGE_COLUMN_1;
+    EDGE_COLUMN_2;
+    EDGE_COLUMN_3;
+}
+
+#undef EDGE_COLUMN_0
+#undef EDGE_COLUMN_1
+#undef EDGE_COLUMN_2
+#undef EDGE_COLUMN_3
+
 static inline void median_filter(float* data, float* output, int nx, int ny,
   int filter_size, float median_function(float*),
   void populate_median_array_function(float*, float*, int, int, int, int),
-  void edge_column_function(float*, float*, int, int, int), void edge_row_function(float*, float*, int, int),
+  void edge_column_function(float*, float*, int, int), void edge_row_function(float*, float*, int, int, int),
   int half_width)
 {
     /*Total size of the array */
@@ -514,12 +514,12 @@ static inline void median_filter(float* data, float* output, int nx, int ny,
 #pragma omp parallel firstprivate(output, data, nx, nxny) private(i)
     /* Copy the border pixels from the original data into the output array */
     for (i = 0; i < nx; i++) {
-        edge_column_function(data, output, i, nx, nxny);
+        edge_row_function(data, output, i, nx, nxny);
     }
 
 #pragma omp parallel firstprivate(output, data, nx, ny) private(j, nxj)
     for (j = 0; j < ny; j++) {
-        edge_row_function(data, output, j, nx);
+        edge_column_function(data, output, j, nx);
     }
 
     return;
@@ -667,7 +667,7 @@ static inline void separable_median_filter(float* data, float* output, int nx, i
     int filter_size, float median_function(float*),
     void populate_row_median_array_function(float*, float*, int, int),
     void populate_column_median_array_function(float*, float*, int, int, int),
-    void edge_column_function(float*, float*, int, int, int), void edge_row_function(float*, float*, int, int),
+    void edge_column_function(float*, float*, int, int), void edge_row_function(float*, float*, int, int, int),
     int half_width)
 {
      /* Total number of pixels */
@@ -713,7 +713,7 @@ static inline void separable_median_filter(float* data, float* output, int nx, i
     /* Fill in the borders of rowmed with the original data values */
 #pragma omp parallel for firstprivate(rowmed, data, nx, ny) private(j, nxj)
     for (j = 0; j < ny; j++) {
-        edge_column_function(data, rowmed, j, nx, nxny);
+        edge_column_function(data, rowmed, j, nx);
     }
 
     /* Median filter the columns */
@@ -742,11 +742,11 @@ static inline void separable_median_filter(float* data, float* output, int nx, i
     /* Copy the border pixels from the original data into the output array */
 #pragma omp parallel for firstprivate(output, data, nx, nxny) private(i)
     for (i = 0; i < nx; i++) {
-        edge_column_function(data, output, i, nx, nxny);
+        edge_row_function(data, output, i, nx, nxny);
     }
 #pragma omp parallel for firstprivate(output, data, nx, ny) private(j, nxj)
     for (j = 0; j < ny; j++) {
-        edge_row_function(data, output, j, nx);
+        edge_column_function(data, output, j, nx);
     }
 
     return;
