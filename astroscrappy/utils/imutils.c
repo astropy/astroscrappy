@@ -277,57 +277,62 @@ PyLaplaceConvolve(float* data, float* output, int nx, int ny)
     return;
 }
 
+#define DILATE_3 \
+/* Start in the middle and work out */ \
+uint8_t p = data[i + nxj]; \
+/* Right 1 */ \
+p = p || data[i + 1 + nxj]; \
+/* Left 1 */ \
+p = p || data[i - 1 + nxj]; \
+/* Up 1 */ \
+p = p || data[i + nx + nxj]; \
+/* Down 1 */ \
+p = p || data[i - nx + nxj]; \
+/* Up 1 Right 1 */ \
+p = p || data[i + 1 + nx + nxj]; \
+/* Up 1 Left 1 */ \
+p = p || data[i - 1 + nx + nxj]; \
+/* Down 1 Right 1 */ \
+p = p || data[i + 1 - nx + nxj]; \
+/* Down 1 Left 1 */ \
+p = p || data[i - 1 - nx + nxj]
+
 static inline uint8_t dilate_3(uint8_t* data, int i, int nxj, int nx){
-    /* Start in the middle and work out */
-    uint8_t p = data[i + nxj];
-    /* Right 1 */
-    p = p || data[i + 1 + nxj];
-    /* Left 1 */
-    p = p || data[i - 1 + nxj];
-    /* Up 1 */
-    p = p || data[i + nx + nxj];
-    /* Down 1 */
-    p = p || data[i - nx + nxj];
-    /* Up 1 Right 1 */
-    p = p || data[i + 1 + nx + nxj];
-    /* Up 1 Left 1 */
-    p = p || data[i - 1 + nx + nxj];
-    /* Down 1 Right 1 */
-    p = p || data[i + 1 - nx + nxj];
-    /* Down 1 Left 1 */
-    p = p || data[i - 1 - nx + nxj];
+    DILATE_3;
     return p;
 }
 
 static inline uint8_t dilate_5(uint8_t* data, int i, int nxj, int nx){
-    uint8_t p = dilate_3(data, i, nxj, nx);
+    DILATE_3;
     /* Right 2 */
-    p = p || data[i + 4 + nxj];
+    p = p || data[i + 2 + nxj];
     /* Left 2 */
-    p = p || data[i + nxj];
+    p = p || data[i - 2 + nxj];
     /* Up 2 */
-    p = p || data[i + 2 + nx + nx + nxj];
+    p = p || data[i + nx + nx + nxj];
     /* Down 2 */
-    p = p || data[i + 2 - nx - nx + nxj];
+    p = p || data[i - nx - nx + nxj];
     /* Right 2 Up 1 */
-    p = p || data[i + 4 + nx + nxj];
+    p = p || data[i + 2 + nx + nxj];
     /* Right 2 Down 1 */
-    p = p || data[i + 4 - nx + nxj];
+    p = p || data[i + 2 - nx + nxj];
     /* Left 2 Up 1 */
-    p = p || data[i + nx + nxj];
+    p = p || data[i - 2 + nx + nxj];
     /* Left 2 Down 1 */
-    p = p || data[i - nx + nxj];
+    p = p || data[i - 2 - nx + nxj];
     /* Up 2 Right 1 */
-    p = p || data[i + 3 + nx + nx + nxj];
-    /* Up 2 Left 1 */
     p = p || data[i + 1 + nx + nx + nxj];
+    /* Up 2 Left 1 */
+    p = p || data[i - 1 + nx + nx + nxj];
     /* Down 2 Right 1 */
-    p = p || data[i + 3 - nx - nx + nxj];
-    /* Down 2 Left 1 */
     p = p || data[i + 1 - nx - nx + nxj];
+    /* Down 2 Left 1 */
+    p = p || data[i - 1 - nx - nx + nxj];
 
     return p;
 }
+
+#undef DILATE_3
 
 #define EDGE_ROW_3 \
 output[i] = data[i];\
@@ -370,7 +375,8 @@ static inline void dilate_edge_columns_5(uint8_t* data, uint8_t* output, int nx,
 #undef EDGE_COLUMN_5
 
 static inline void dilate(uint8_t* data, uint8_t* output, int nx, int ny, uint8_t dilate_function(uint8_t*, int, int, int),
-    void dilate_edge_rows(uint8_t*, uint8_t*, int, int, int), void dilate_edge_columns(uint8_t*, uint8_t*, int, int))
+    void dilate_edge_rows(uint8_t*, uint8_t*, int, int, int), void dilate_edge_columns(uint8_t*, uint8_t*, int, int),
+    int half_width)
 {
     /* Precompute the total number of pixels; minor optimization */
     int nxny = nx * ny;
@@ -384,9 +390,9 @@ static inline void dilate(uint8_t* data, uint8_t* output, int nx, int ny, uint8_
 #pragma omp parallel for firstprivate(output, data, nxny, nx, ny) private(i, j, nxj)
 
     /* Loop through all of the pixels excluding the border */
-    for (j = 1; j < ny - 1; j++) {
+    for (j = half_width; j < ny - half_width; j++) {
         nxj = nx * j;
-        for (i = 1; i < nx - 1; i++) {
+        for (i = half_width; i < nx - half_width; i++) {
             output[i + nxj] = dilate_function(data, i, nxj, nx);
         }
     }
@@ -422,7 +428,7 @@ static inline void dilate(uint8_t* data, uint8_t* output, int nx, int ny, uint8_
 void
 PyDilate3(uint8_t* data, uint8_t* output, int nx, int ny)
 {
-    dilate(data, output, nx, ny, dilate_3, dilate_edge_rows_3, dilate_edge_columns_3);
+    dilate(data, output, nx, ny, dilate_3, dilate_edge_rows_3, dilate_edge_columns_3, 1);
 }
 
 /* Do niter iterations of boolean dilation on an array of size nx x ny. The
@@ -443,7 +449,7 @@ PyDilate3(uint8_t* data, uint8_t* output, int nx, int ny)
 void
 PyDilate5(uint8_t* data, uint8_t* output, int niter, int nx, int ny)
 {
-    dilate(data, output, nx, ny, dilate_5, dilate_edge_rows_5, dilate_edge_columns_5);
+    dilate(data, output, nx, ny, dilate_5, dilate_edge_rows_5, dilate_edge_columns_5, 2);
     if (niter == 1) {
     // Short circuit if we are only doing one iteration
     return;
@@ -455,6 +461,6 @@ PyDilate5(uint8_t* data, uint8_t* output, int niter, int nx, int ny)
             // Copy the last run output into the intermediate array
             intermediate[j] = output[j];
         }
-        dilate(intermediate, output, nx, ny, dilate_5, dilate_edge_rows_5, dilate_edge_columns_5);
+        dilate(intermediate, output, nx, ny, dilate_5, dilate_edge_rows_5, dilate_edge_columns_5, 2);
     }
 }
