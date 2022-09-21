@@ -3,9 +3,9 @@ import numpy as np
 from numpy.testing import assert_allclose
 
 from astroscrappy.utils import (median, optmed3, optmed5, optmed7, optmed9, optmed25,
-                     medfilt3, medfilt5, medfilt7, sepmedfilt3, sepmedfilt5,
-                     sepmedfilt7, sepmedfilt9, dilate3, dilate5, subsample,
-                     rebin, laplaceconvolve, convolve)
+                                medfilt3, medfilt5, medfilt7, sepmedfilt3, sepmedfilt5,
+                                sepmedfilt7, sepmedfilt9, dilate3, dilate5, subsample,
+                                rebin, laplaceconvolve, convolve)
 
 import scipy.ndimage as ndi
 
@@ -149,6 +149,7 @@ def test_dilate5():
     kernel[4, 4] = 0
     # Make a zero padded array for the numpy version to operate
     npdilate = binary_dilation(a, structure=kernel, iterations=1, border_value=0)
+
     def reset_edges(dilated, data):
         for i in range(2):
             dilated[:, i] = data[:, i]
@@ -156,6 +157,7 @@ def test_dilate5():
         for i in range(-2, 0, 1):
             dilated[:, i] = data[:, i]
             dilated[i, :] = data[i, :]
+
     reset_edges(npdilate, a)
     npdilate = ndi.binary_dilation(npdilate.copy(), structure=kernel, iterations=1, border_value=0)
     reset_edges(npdilate, a)
