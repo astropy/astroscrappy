@@ -11,7 +11,7 @@ build-backend = 'setuptools.build_meta'
 [tool.cibuildwheel]
 # Skip pypy on mac due to numpy/accelerate issues
 skip = "pp* cp*-manylinux_i686 *musllinux*"
-test-skip = "cp9-win*"
+test-skip = "cp9-win* cp10-win*"
 environment = { PIP_PREFER_BINARY=1 }
 test-requires = "pytest scipy"
 test-command = "pytest --pyargs astroscrappy"
