@@ -16,16 +16,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Python 3.8 with required dependencies and measure coverage
-            os: ubuntu-latest
-            python-version: 3.8
-            toxenv: py38-test-numpy122
-            coverage: true
-
           - name: Python 3.9 with required dependencies
             os: windows-latest
             python-version: 3.9
-            toxenv: py39-test
+            toxenv: py39-test-numpy122
 
           - name: Python 3.10 with required dependencies
             os: ubuntu-latest
@@ -45,15 +39,15 @@ jobs:
 
           - name: Code style checks
             os: ubuntu-latest
-            python-version: 3.8
+            python-version: "3.12"
             toxenv: codestyle
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
