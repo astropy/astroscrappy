@@ -7,8 +7,7 @@ from ..utils import (median, optmed3, optmed5, optmed7, optmed9, optmed25,
                      sepmedfilt7, sepmedfilt9, dilate3, dilate5, subsample,
                      rebin, laplaceconvolve, convolve)
 
-from scipy.ndimage.morphology import binary_dilation
-from scipy import ndimage
+import scipy.ndimage as ndi
 
 
 def test_median():
@@ -43,7 +42,7 @@ def test_optmed25():
 
 def test_medfilt3():
     a = np.ascontiguousarray(np.random.random((1001, 1001))).astype('f4')
-    npmed3 = ndimage.filters.median_filter(a, size=(3, 3), mode='nearest')
+    npmed3 = ndi.median_filter(a, size=(3, 3), mode='nearest')
     npmed3[:1, :] = a[:1, :]
     npmed3[-1:, :] = a[-1:, :]
     npmed3[:, :1] = a[:, :1]
@@ -55,7 +54,7 @@ def test_medfilt3():
 
 def test_medfilt5():
     a = np.ascontiguousarray(np.random.random((1001, 1001))).astype('f4')
-    npmed5 = ndimage.filters.median_filter(a, size=(5, 5), mode='nearest')
+    npmed5 = ndi.median_filter(a, size=(5, 5), mode='nearest')
     npmed5[:2, :] = a[:2, :]
     npmed5[-2:, :] = a[-2:, :]
     npmed5[:, :2] = a[:, :2]
@@ -67,7 +66,7 @@ def test_medfilt5():
 
 def test_medfilt7():
     a = np.ascontiguousarray(np.random.random((1001, 1001))).astype('f4')
-    npmed7 = ndimage.filters.median_filter(a, size=(7, 7), mode='nearest')
+    npmed7 = ndi.median_filter(a, size=(7, 7), mode='nearest')
     npmed7[:3, :] = a[:3, :]
     npmed7[-3:, :] = a[-3:, :]
     npmed7[:, :3] = a[:, :3]
@@ -79,10 +78,10 @@ def test_medfilt7():
 
 def test_sepmedfilt3():
     a = np.ascontiguousarray(np.random.random((1001, 1001))).astype('f4')
-    npmed3 = ndimage.filters.median_filter(a, size=(1, 3), mode='nearest')
+    npmed3 = ndi.median_filter(a, size=(1, 3), mode='nearest')
     npmed3[:, :1] = a[:, :1]
     npmed3[:, -1:] = a[:, -1:]
-    npmed3 = ndimage.filters.median_filter(npmed3, size=(3, 1), mode='nearest')
+    npmed3 = ndi.median_filter(npmed3, size=(3, 1), mode='nearest')
     npmed3[:1, :] = a[:1, :]
     npmed3[-1:, :] = a[-1:, :]
     npmed3[:, :1] = a[:, :1]
@@ -94,10 +93,10 @@ def test_sepmedfilt3():
 
 def test_sepmedfilt5():
     a = np.ascontiguousarray(np.random.random((1001, 1001))).astype('f4')
-    npmed5 = ndimage.filters.median_filter(a, size=(1, 5), mode='nearest')
+    npmed5 = ndi.median_filter(a, size=(1, 5), mode='nearest')
     npmed5[:, :2] = a[:, :2]
     npmed5[:, -2:] = a[:, -2:]
-    npmed5 = ndimage.filters.median_filter(npmed5, size=(5, 1), mode='nearest')
+    npmed5 = ndi.median_filter(npmed5, size=(5, 1), mode='nearest')
     npmed5[:2, :] = a[:2, :]
     npmed5[-2:, :] = a[-2:, :]
     npmed5[:, :2] = a[:, :2]
@@ -109,10 +108,10 @@ def test_sepmedfilt5():
 
 def test_sepmedfilt7():
     a = np.ascontiguousarray(np.random.random((1001, 1001))).astype('f4')
-    npmed7 = ndimage.filters.median_filter(a, size=(1, 7), mode='nearest')
+    npmed7 = ndi.median_filter(a, size=(1, 7), mode='nearest')
     npmed7[:, :3] = a[:, :3]
     npmed7[:, -3:] = a[:, -3:]
-    npmed7 = ndimage.filters.median_filter(npmed7, size=(7, 1), mode='nearest')
+    npmed7 = ndi.median_filter(npmed7, size=(7, 1), mode='nearest')
     npmed7[:3, :] = a[:3, :]
     npmed7[-3:, :] = a[-3:, :]
     npmed7[:, :3] = a[:, :3]
@@ -124,10 +123,10 @@ def test_sepmedfilt7():
 
 def test_sepmedfilt9():
     a = np.ascontiguousarray(np.random.random((1001, 1001))).astype('f4')
-    npmed9 = ndimage.filters.median_filter(a, size=(1, 9), mode='nearest')
+    npmed9 = ndi.median_filter(a, size=(1, 9), mode='nearest')
     npmed9[:, :4] = a[:, :4]
     npmed9[:, -4:] = a[:, -4:]
-    npmed9 = ndimage.filters.median_filter(npmed9, size=(9, 1), mode='nearest')
+    npmed9 = ndi.median_filter(npmed9, size=(9, 1), mode='nearest')
     npmed9[:4, :] = a[:4, :]
     npmed9[-4:, :] = a[-4:, :]
     npmed9[:, :4] = a[:, :4]
@@ -149,8 +148,8 @@ def test_dilate5():
     # Make a zero padded array for the numpy version to operate
     paddeda = np.zeros((1005, 1005), dtype=bool)
     paddeda[2:-2, 2:-2] = a[:, :]
-    npdilate = binary_dilation(np.ascontiguousarray(paddeda),
-                               structure=kernel, iterations=2)
+    npdilate = ndi.binary_dilation(np.ascontiguousarray(paddeda),
+                                   structure=kernel, iterations=2)
     cdilate = dilate5(a, 2)
 
     assert np.all(npdilate[2:-2, 2:-2] == cdilate)
@@ -161,8 +160,8 @@ def test_dilate3():
     a = np.zeros((1001, 1001), dtype=bool)
     a[np.random.random((1001, 1001)) < 0.05] = True
     kernel = np.ones((3, 3))
-    npgrow = binary_dilation(np.ascontiguousarray(a),
-                             structure=kernel, iterations=1)
+    npgrow = ndi.binary_dilation(np.ascontiguousarray(a),
+                                 structure=kernel, iterations=1)
     cgrow = dilate3(a)
     npgrow[:, 0] = a[:, 0]
     npgrow[:, -1] = a[:, -1]
@@ -203,7 +202,7 @@ def test_laplaceconvolve():
     a = np.ascontiguousarray(np.random.random((1001, 1001))).astype('f4')
     k = np.array([[0.0, -1.0, 0.0], [-1.0, 4.0, -1.0], [0.0, -1.0, 0.0]])
     k = k.astype('<f4')
-    npconv = ndimage.filters.convolve(a, k, mode='constant', cval=0.0)
+    npconv = ndi.convolve(a, k, mode='constant', cval=0.0)
     cconv = laplaceconvolve(a)
     assert_allclose(npconv, cconv, rtol=0.0, atol=1e-6)
 
@@ -211,6 +210,6 @@ def test_laplaceconvolve():
 def test_convolve():
     a = np.ascontiguousarray(np.random.random((1001, 1001))).astype('f4')
     k = np.ascontiguousarray(np.random.random((5, 5))).astype('f4')
-    npconv = ndimage.filters.convolve(a, k, mode='constant', cval=0.0)
+    npconv = ndi.convolve(a, k, mode='constant', cval=0.0)
     cconv = convolve(a, k)
     assert_allclose(cconv, npconv, rtol=0, atol=1e-5)
