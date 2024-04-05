@@ -8,6 +8,9 @@ requires = ["setuptools",
 
 build-backend = 'setuptools.build_meta'
 
+[tool.setuptools_scm]
+write_to = "astroscrappy/version.py"
+
 [tool.cibuildwheel]
 # Skip pypy on mac due to numpy/accelerate issues
 skip = ["pp*", "*musllinux*"]
