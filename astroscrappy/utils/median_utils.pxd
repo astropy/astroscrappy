@@ -10,4 +10,4 @@ without requiring the GIL.
 Calculate the median on the first n elements of C float array
 without requiring the GIL.
 """
-cdef float cymedian(float* aptr, int n) nogil
+cdef float cymedian(float* aptr, int n) noexcept nogil

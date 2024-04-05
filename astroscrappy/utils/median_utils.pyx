@@ -59,7 +59,7 @@ def median(np.ndarray[np.float32_t, mode='c', cast=True] a, int n):
         med = PyMedian(aptr, n)
     return med
 
-cdef float cymedian(float* a, int n) nogil:
+cdef float cymedian(float* a, int n) noexcept nogil:
     """cymedian(a, n)\n
     Cython function to calculate the median without requiring the GIL.
     :param a:
