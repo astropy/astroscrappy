@@ -1,13 +1,21 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
-from ..astroscrappy import detect_cosmics
+
+import pytest
 
 from . import fake_data
-
-# Get fake data to work on
-imdata, crmask = fake_data.make_fake_data()
+from ..astroscrappy import detect_cosmics
 
 
-def test_median_clean():
+@pytest.fixture
+def testdata():
+    # Get fake data to work on
+    imdata, crmask = fake_data.make_fake_data()
+    return imdata, crmask
+
+
+
+def test_median_clean(testdata):
+    imdata, crmask = testdata
     # Because our image only contains single cosmics, turn off
     # neighbor detection. Also, our cosmic rays are high enough
     # contrast that we can turn our detection threshold up.
@@ -22,7 +30,8 @@ def test_median_clean():
     assert _mask2.sum() == 0
 
 
-def test_medmask_clean():
+def test_medmask_clean(testdata):
+    imdata, crmask = testdata
     # Because our image only contains single cosmics, turn off
     # neighbor detection. Also, our cosmic rays are high enough
     # contrast that we can turn our detection threshold up.
@@ -37,7 +46,8 @@ def test_medmask_clean():
     assert _mask2.sum() == 0
 
 
-def test_meanmask_clean():
+def test_meanmask_clean(testdata):
+    imdata, crmask = testdata
     # Because our image only contains single cosmics, turn off
     # neighbor detection. Also, our cosmic rays are high enough
     # contrast that we can turn our detection threshold up.
@@ -52,7 +62,8 @@ def test_meanmask_clean():
     assert _mask2.sum() == 0
 
 
-def test_idw_clean():
+def test_idw_clean(testdata):
+    imdata, crmask = testdata
     # Because our image only contains single cosmics, turn off
     # neighbor detection. Also, our cosmic rays are high enough
     # contrast that we can turn our detection threshold up.
