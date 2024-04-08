@@ -23,7 +23,7 @@ jobs:
           python-version: '3.12'
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.16.2
+        uses: pypa/cibuildwheel@v2.17.0
 
       - uses: actions/upload-artifact@v4
         with:
