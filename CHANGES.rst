@@ -1,7 +1,7 @@
 1.2.0.dev (unreleased)
 ----------------------
 
-- Drop support for Python 3.6.
+- The minimum supported version of Python is now 3.9.
 - Change to normalization for convolution fine structure method to instead use a matched filter.
 
 1.1.0 (2021-11-19)
