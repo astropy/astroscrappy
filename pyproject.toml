@@ -62,19 +62,15 @@ filterwarnings = [
 source = ["astroscrappy"]
 plugins = [ "Cython.Coverage" ]
 omit = [
-    "astroscrappy/_astropy_init*",
     "astroscrappy/conftest.py",
     "astroscrappy/*setup_package*",
     "astroscrappy/tests/*",
     "astroscrappy/*/tests/*",
-    "astroscrappy/extern/*",
     "astroscrappy/version*",
-    "*/astroscrappy/_astropy_init*",
     "*/astroscrappy/conftest.py",
     "*/astroscrappy/*setup_package*",
     "*/astroscrappy/tests/*",
     "*/astroscrappy/*/tests/*",
-    "*/astroscrappy/extern/*",
     "*/astroscrappy/version*",
 ]
 
