@@ -57,13 +57,8 @@ scipy is required for certain tests to pass, but the code itself does not depend
 scipy.
 """
 
-# Affiliated packages may add whatever they like to this file, but
-# should keep this content at the top.
-# ----------------------------------------------------------------------------
-from ._astropy_init import *  # noqa
-# ----------------------------------------------------------------------------
-
 from .astroscrappy import *  # noqa
 from .utils import *  # noqa
+from .version import version as __version__  # noqa
 
 __all__ = ['detect_cosmics']  # noqa

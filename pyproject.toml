@@ -1,16 +1,94 @@
 [build-system]
-
-requires = ["setuptools",
-            "setuptools_scm",
-            "extension-helpers==1.*",
-            "numpy>=1.25,<2",
-            "Cython>=3.0,<3.1"]
-
+requires = [
+    "setuptools>=61.2",
+    "setuptools_scm[toml]>=6.2",
+    "extension-helpers==1.*",
+    "numpy>=2.0.0rc1",
+    "Cython>=3.0,<3.1",
+]
 build-backend = 'setuptools.build_meta'
+
+[project]
+name = "astroscrappy"
+readme = "README.rst"
+authors = [
+    { name = "Curtis McCully", email = "cmccully@lco.global" },
+]
+description = "Speedy Cosmic Ray Annihilation Package in Python"
+license = { text = "BSD-3-Clause" }
+# edit-on-github = "False"
+# github-project = "astropy/astroscrappy"
+requires-python = ">=3.9"
+dependencies = [
+    "astropy",
+    "numpy",
+]
+dynamic = [ "version" ]
+
+[project.urls]
+Homepage = "https://github.com/astropy/astroscrappy"
+
+[project.optional-dependencies]
+docs = ["sphinx-astropy"]
+test = ["Cython", "pytest-astropy", "scipy"]
+
+[tool.setuptools]
+license-files = ["licenses/LICENSE.rst"]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["astroscrappy*"]
+
+[tool.setuptools.package-data]
+"*" = [ "data/*" ]
+
+[tool.setuptools_scm]
+write_to = "astroscrappy/version.py"
+
+[tool.pytest.ini_options]
+testpaths = ["astroscrappy", "docs"]
+astropy_header = true
+doctest_plus = "enabled"
+text_file_format = "rst"
+addopts = "-p no:warnings --doctest-rst"
+doctest_norecursedirs = ["*/setup_package.py"]
+filterwarnings = [
+    # action:message:category:module:lineno
+    # "error",
+    # "ignore:.*divide by zero encountered in double_scalars.*:RuntimeWarning:arviz",
+]
+
+[tool.coverage.run]
+source = ["astroscrappy"]
+plugins = [ "Cython.Coverage" ]
+omit = [
+    "astroscrappy/conftest.py",
+    "astroscrappy/*setup_package*",
+    "astroscrappy/tests/*",
+    "astroscrappy/*/tests/*",
+    "astroscrappy/version*",
+    "*/astroscrappy/conftest.py",
+    "*/astroscrappy/*setup_package*",
+    "*/astroscrappy/tests/*",
+    "*/astroscrappy/*/tests/*",
+    "*/astroscrappy/version*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "except ImportError",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "def main\\(.*\\):",
+    "pragma: py{ignore_python_version}",
+    "def _ipython_key_completions_",
+]
 
 [tool.cibuildwheel]
 # Skip pypy on mac due to numpy/accelerate issues
 skip = ["pp*", "*musllinux*"]
+build-verbosity = 1
 environment = { PIP_PREFER_BINARY=1 }
 test-requires = "pytest scipy"
 test-command = "pytest --pyargs astroscrappy"
