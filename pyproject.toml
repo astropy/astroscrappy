@@ -86,15 +86,5 @@ exclude_lines = [
 ]
 
 [tool.cibuildwheel]
-# Skip pypy on mac due to numpy/accelerate issues
-skip = ["pp*", "*musllinux*"]
 build-verbosity = 1
 environment = { PIP_PREFER_BINARY=1 }
-test-requires = "pytest scipy"
-test-command = "pytest --pyargs astroscrappy"
-
-[tool.cibuildwheel.linux]
-archs = ["x86_64"]
-
-[tool.cibuildwheel.windows]
-archs = ["AMD64"]
