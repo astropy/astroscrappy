@@ -1,13 +1,16 @@
 name: Run unit tests
 
 on:
-  pull_request:
   push:
-    branches: [ main ]
-    tags:
+  pull_request:
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
+
   tests:
     name: ${{ matrix.name }} (${{ matrix.os }}, ${{ matrix.toxenv }})
     runs-on: ${{ matrix.os }}
@@ -66,3 +69,19 @@ jobs:
       run: |
         pip install codecov
         codecov
+
+  publish:
+    needs: tests
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish.yml@v1
+    with:
+      test_extras: test
+      test_command: pytest -p no:warnings --pyargs astroscrappy
+      targets: |
+        - cp*-manylinux_x86_64
+        - cp*-manylinux_aarch64
+        - cp*-macosx_x86_64
+        - cp*-macosx_arm64
+        - cp*-win_amd64
+    secrets:
+      pypi_token: ${{ secrets.pypi_token }}
+      anaconda_token: ${{ secrets.anaconda_token }}
