@@ -1,6 +1,8 @@
-1.2.0.dev (unreleased)
-----------------------
+1.2.0 (2024-05-02)
+------------------
 
+- Updated package infrastructure.
+- Fixed compatibility with Numpy 2.0 and recent versions of SciPy.
 - The minimum supported version of Python is now 3.9.
 - Change to normalization for convolution fine structure method to instead use a matched filter.
 
