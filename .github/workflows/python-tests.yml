@@ -72,7 +72,7 @@ jobs:
 
   publish:
     needs: tests
-    uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish.yml@d68193b68216da64eafaa618f53c59f5d271c56e  # v1.14.0
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish.yml@9f1f43251dde69da8613ea8e11144f05cdea41d5  # v1.15.0
     with:
       test_extras: test
       test_command: pytest -p no:warnings --pyargs astroscrappy
