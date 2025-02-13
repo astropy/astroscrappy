@@ -15,7 +15,7 @@
  */
 #include <stdint.h> 
 
-/* Define a bool type because there isn't one built in ANSI C */
+/* Define a bool type avoiding reserves words in C23 */
 typedef uint8_t bool_t;
 #define true_v 1
 #define false_v 0
