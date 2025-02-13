@@ -16,9 +16,9 @@
 #include <stdint.h> 
 
 /* Define a bool type because there isn't one built in ANSI C */
-typedef uint8_t bool;
-#define true 1
-#define false 0
+typedef uint8_t bool_t;
+#define true_v 1
+#define false_v 0
 
 /* Subsample an array 2x2 given an input array data with size nx x ny. Each
  * pixel is replicated into 4 pixels; no averaging is performed. The results
@@ -77,7 +77,7 @@ PyLaplaceConvolve(float* data, float* output, int nx, int ny);
  * data[i + nx * j].
  */
 void
-PyDilate3(bool* data, bool* output, int nx, int ny);
+PyDilate3(bool_t* data, bool_t* output, int nx, int ny);
 
 /* Do niter iterations of boolean dilation on an array of size nx x ny. The
  * results are saved in the output array. The output array should already be
@@ -95,6 +95,6 @@ PyDilate3(bool* data, bool* output, int nx, int ny);
  * memory location of pixel i,j is data[i + nx * j].
  */
 void
-PyDilate5(bool* data, bool* output, int iter, int nx, int ny);
+PyDilate5(bool_t* data, bool_t* output, int iter, int nx, int ny);
 
 #endif /* IMUTILS_H_ */
