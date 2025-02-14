@@ -50,7 +50,7 @@ jobs:
       with:
         fetch-depth: 0
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b  # v5.3.0
+      uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38  # v5.4.0
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
@@ -72,7 +72,7 @@ jobs:
 
   publish:
     needs: tests
-    uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish.yml@9f1f43251dde69da8613ea8e11144f05cdea41d5  # v1.15.0
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish.yml@8c0fde6f7e926df6ed7057255d29afa9c1ad5320  # v1.16.0
     with:
       test_extras: test
       test_command: pytest -p no:warnings --pyargs astroscrappy
