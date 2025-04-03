@@ -15,10 +15,10 @@
  */
 #include <stdint.h> 
 
-/* Define a bool type because there isn't one built in ANSI C */
-typedef uint8_t bool;
-#define true 1
-#define false 0
+/* Define a bool type avoiding reserves words in C23 */
+typedef uint8_t bool_t;
+#define true_v 1
+#define false_v 0
 
 /*Find the median value of an array "a" of length n. */
 float
