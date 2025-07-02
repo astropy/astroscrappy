@@ -334,7 +334,7 @@ PyLaplaceConvolve(float* data, float* output, int nx, int ny)
  * data[i + nx * j].
  */
 void
-PyDilate3(bool* data, bool* output, int nx, int ny)
+PyDilate3(bool_t* data, bool_t* output, int nx, int ny)
 {
     PyDoc_STRVAR(PyDilate3__doc__,
         "PyDilate3(data, output, nx, ny) -> void\n\n"
@@ -355,7 +355,7 @@ PyDilate3(bool* data, bool* output, int nx, int ny)
 
     /* Pixel value p. Each thread needs its own unique copy of this so we don't
      initialize this until the pragma below. */
-    bool p;
+    bool_t p;
 
 #pragma omp parallel for firstprivate(output, data, nxny, nx, ny) \
     private(i, j, nxj, p)
@@ -419,7 +419,7 @@ PyDilate3(bool* data, bool* output, int nx, int ny)
  * memory location of pixel i,j is data[i + nx * j].
  */
 void
-PyDilate5(bool* data, bool* output, int niter, int nx, int ny)
+PyDilate5(bool_t* data, bool_t* output, int niter, int nx, int ny)
 {
     PyDoc_STRVAR(PyDilate5__doc__,
         "PyDilate5(data, output, nx, ny) -> void\n\n"
@@ -445,7 +445,7 @@ PyDilate5(bool* data, bool* output, int niter, int nx, int ny)
     int nxny = nx * ny;
 
     /* The padded array to work on */
-    bool* padarr = (bool *) malloc(padnxny * sizeof(bool));
+    bool_t* padarr = (bool_t *) malloc(padnxny * sizeof(bool_t));
 
     /*Loop indices */
     int i, j, nxj, padnxj;
@@ -453,24 +453,24 @@ PyDilate5(bool* data, bool* output, int niter, int nx, int ny)
 
     /* Pixel value p. This needs to be unique for each thread so we initialize
      * it below inside the pragma. */
-    bool p;
+    bool_t p;
 
 #pragma omp parallel firstprivate(padarr, padnx, padnxny) private(i)
     /* Initialize the borders of the padded array to zero */
     for (i = 0; i < padnx; i++) {
-        padarr[i] = false;
-        padarr[i + padnx] = false;
-        padarr[padnxny - padnx + i] = false;
-        padarr[padnxny - padnx - padnx + i] = false;
+        padarr[i] = false_v;
+        padarr[i + padnx] = false_v;
+        padarr[padnxny - padnx + i] = false_v;
+        padarr[padnxny - padnx - padnx + i] = false_v;
     }
 
 #pragma omp parallel firstprivate(padarr, padnx, padny) private(j, padnxj)
     for (j = 0; j < padny; j++) {
         padnxj = padnx * j;
-        padarr[padnxj] = false;
-        padarr[padnxj + 1] = false;
-        padarr[padnxj + padnx - 1] = false;
-        padarr[padnxj + padnx - 2] = false;
+        padarr[padnxj] = false_v;
+        padarr[padnxj + 1] = false_v;
+        padarr[padnxj + padnx - 1] = false_v;
+        padarr[padnxj + padnx - 2] = false_v;
     }
 
 #pragma omp parallel firstprivate(output, data, nxny) private(i)
