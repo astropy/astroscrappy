@@ -3,8 +3,8 @@ requires = [
     "setuptools>=61.2",
     "setuptools_scm[toml]>=6.2",
     "extension-helpers==1.*",
-    "numpy>=2.0.0rc1",
-    "Cython>=3.0,<3.1",
+    "numpy>=2.0.0",
+    "Cython>=3.0,<4",
 ]
 build-backend = 'setuptools.build_meta'
 
@@ -87,4 +87,6 @@ exclude_lines = [
 
 [tool.cibuildwheel]
 build-verbosity = 1
+test-skip = "*-musllinux_x86_64"
+skip = ["cp*t-*"] # no free threading
 environment = { PIP_PREFER_BINARY=1 }
