@@ -15,7 +15,8 @@ authors = [
     { name = "Curtis McCully", email = "cmccully@lco.global" },
 ]
 description = "Speedy Cosmic Ray Annihilation Package in Python"
-license = { text = "BSD-3-Clause" }
+license = "BSD-3-Clause"
+license-files = ["licenses/LICENSE.rst"]
 # edit-on-github = "False"
 # github-project = "astropy/astroscrappy"
 requires-python = ">=3.9"
@@ -33,7 +34,6 @@ docs = ["sphinx-astropy"]
 test = ["Cython", "pytest-astropy", "scipy"]
 
 [tool.setuptools]
-license-files = ["licenses/LICENSE.rst"]
 include-package-data = true
 
 [tool.setuptools.packages.find]
