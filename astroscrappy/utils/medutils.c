@@ -63,7 +63,7 @@ PyMedian(float* a, int n)
     }
 
     /* Start an infinite loop */
-    while (true) {
+    while (true_v) {
 
         /* Only One or two elements left */
         if (high <= low + 1) {
@@ -92,7 +92,7 @@ PyMedian(float* a, int n)
          * swap items when stuck */
         ll = low + 1;
         hh = high;
-        while (true) {
+        while (true_v) {
             do
                 ll++;
             while (arr[low] > arr[ll]);
