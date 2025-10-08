@@ -19,7 +19,7 @@ license = "BSD-3-Clause"
 license-files = ["licenses/LICENSE.rst"]
 # edit-on-github = "False"
 # github-project = "astropy/astroscrappy"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "astropy",
     "numpy",
