@@ -38,14 +38,14 @@ jobs:
 
           - name: Python 3.13 with required dependencies
             os: macos-latest
-            python-version: "3.12"
-            toxenv: py312-test
+            python-version: "3.13"
+            toxenv: py313-test
             coverage: true
 
           - name: Python 3.14 with required dependencies
             os: windows-latest
-            python-version: "3.12"
-            toxenv: py312-test
+            python-version: "3.14"
+            toxenv: py314-test
             coverage: true
 
           - name: Code style checks
