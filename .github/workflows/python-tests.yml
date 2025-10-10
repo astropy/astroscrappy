@@ -43,7 +43,7 @@ jobs:
             coverage: true
 
           - name: Python 3.14 with required dependencies
-            os: windows-latest
+            os: macos-latest
             python-version: "3.14"
             toxenv: py314-test
             coverage: true
