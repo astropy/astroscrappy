@@ -148,7 +148,7 @@ def test_dilate5():
     kernel[4, 0] = 0
     kernel[4, 4] = 0
     # Make a zero padded array for the numpy version to operate
-    npdilate = binary_dilation(a, structure=kernel, iterations=1, border_value=0)
+    npdilate = ndi.binary_dilation(a, structure=kernel, iterations=1, border_value=0)
 
     def reset_edges(dilated, data):
         for i in range(2):
