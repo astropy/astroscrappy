@@ -84,7 +84,8 @@ jobs:
       test_command: pytest -p no:warnings --pyargs astroscrappy
       targets: |
         - cp*-manylinux_x86_64
-        - cp*-manylinux_aarch64
+        - target: cp*-manylinux_aarch64
+          runs-on: ubuntu-24.04-arm
         - cp*-macosx_x86_64
         - cp*-macosx_arm64
         - cp*-win_amd64
