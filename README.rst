@@ -3,7 +3,6 @@ Astro-SCRAPPY: The Speedy Cosmic Ray Annihilation Package in Python
 
 .. image:: https://readthedocs.org/projects/astroscrappy/badge/?version=latest
     :alt: Documentation Status
-    :scale: 100%
     :target: https://astroscrappy.readthedocs.io/en/latest/?badge=latest
 .. image:: https://github.com/astropy/astroscrappy/workflows/Run%20unit%20tests/badge.svg
     :target: https://github.com/astropy/astroscrappy/actions
