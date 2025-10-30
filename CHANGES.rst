@@ -1,4 +1,4 @@
-1.3.0 (unreleased)
+1.3.0 (2025-10-30)
 ------------------
 
 - The minimum supported version of Python is now 3.10.
