@@ -19,26 +19,32 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Python 3.9 with required dependencies
-            os: windows-latest
-            python-version: 3.9
-            toxenv: py39-test-numpy122
 
           - name: Python 3.10 with required dependencies
             os: ubuntu-latest
             python-version: "3.10"
-            toxenv: py310-test-numpy124
+            toxenv: py310-test-numpy126
 
           - name: Python 3.11 with required dependencies
             os: macos-latest
             python-version: "3.11"
-            toxenv: py311-test-astropy53
+            toxenv: py311-test-astropy60
 
           - name: Python 3.12 with required dependencies
             os: ubuntu-latest
             python-version: "3.12"
-            toxenv: py312-test
+            toxenv: py312-test-astropy70
             coverage: true
+
+          - name: Python 3.13 with required dependencies
+            os: windows-latest
+            python-version: "3.13"
+            toxenv: py313-test
+
+          - name: Python 3.14 with required dependencies
+            os: macos-latest
+            python-version: "3.14"
+            toxenv: py314-test
 
           - name: Code style checks
             os: ubuntu-latest
