@@ -209,7 +209,7 @@ def dilate3(np.ndarray[np.uint8_t, ndim=2, mode='c', cast=True] dgrow):
 
     # Allocate the output array here so that Python tracks the memory and will
     # free the memory when we are finished with the output array.
-    output = np.zeros((ny, nx), dtype=np.bool_)
+    output = np.zeros((ny, nx), dtype=bool)
 
     cdef uint8_t * dgrowptr = < uint8_t * > np.PyArray_DATA(dgrow)
     cdef uint8_t * outdgrowptr = < uint8_t * > np.PyArray_DATA(output)

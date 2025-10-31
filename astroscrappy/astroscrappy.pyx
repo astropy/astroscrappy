@@ -688,7 +688,7 @@ cdef void clean_idwinterp(float[:, ::1] cleanarr, bool[:, ::1] crmask,
         no good pixels in a 5x5 region.
     """
 
-    # Go through all of the pixels, ignore the borders
+    # Go through all the pixels, ignore the borders
     cdef int i, j, k, l
     cdef float f11, f12, f21, f22 = background_level
     cdef int x1, x2, y1, y2
