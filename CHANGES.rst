@@ -1,12 +1,8 @@
-1.4.0 (unreleased)
-------------------
-
-- No changes yet.
-
-1.3.0 (2025-10-30)
+1.3.0 (2025-10-31)
 ------------------
 
 - The minimum supported version of Python is now 3.10.
+- Avoid conflicts with c23's new keywords.
 
 1.2.0 (2024-05-02)
 ------------------
