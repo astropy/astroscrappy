@@ -11,14 +11,10 @@
 #define MEDUTILS_H_
 
 /* Including definitions of the standard int types is necesssary for Windows,
- * and does no harm on other platforms. 
+ * and does no harm on other platforms.
  */
-#include <stdint.h> 
-
-/* Define a bool type because there isn't one built in ANSI C */
-typedef uint8_t bool;
-#define true 1
-#define false 0
+#include <stdint.h>
+#include <stdlib.h>
 
 /*Find the median value of an array "a" of length n. */
 float
