@@ -1,7 +1,7 @@
 1.4.0 (unreleased)
 ------------------
 
-- No changes yet.
+- The minimum supported version of Python is now 3.11.
 
 1.3.0 (2025-10-31)
 ------------------
