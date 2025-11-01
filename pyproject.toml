@@ -19,7 +19,7 @@ license = "BSD-3-Clause"
 license-files = ["licenses/LICENSE.rst"]
 # edit-on-github = "False"
 # github-project = "astropy/astroscrappy"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "astropy",
     "numpy",
@@ -92,4 +92,4 @@ skip = ["cp*t-*"] # no free threading
 environment = { PIP_PREFER_BINARY=1 }
 
 [tool.distutils.bdist_wheel]
-py-limited-api = "cp310"
+py-limited-api = "cp311"
