@@ -80,6 +80,8 @@ jobs:
     needs: tests
     uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish.yml@28e947497bed4d6ec3fa1d66d198e95a1d17bc63  # v2.2.1
     with:
+      env: |
+        EXTENSION_HELPERS_PY_LIMITED_API: 'cp311'
       test_extras: test
       test_command: pytest -p no:warnings --pyargs astroscrappy
       targets: |

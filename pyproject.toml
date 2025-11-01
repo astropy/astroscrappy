@@ -90,6 +90,3 @@ build-verbosity = 1
 test-skip = "*-musllinux_x86_64"
 skip = ["cp*t-*"] # no free threading
 environment = { PIP_PREFER_BINARY=1 }
-
-[tool.distutils.bdist_wheel]
-py-limited-api = "cp311"
