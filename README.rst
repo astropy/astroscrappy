@@ -35,8 +35,6 @@ http://www.astro.yale.edu/dokkum/lacosmic/
 van Dokkum 2001, PASP, 113, 789, 1420
 (article : http://adsabs.harvard.edu/abs/2001PASP..113.1420V)
 
-This code requires Cython, preferably version >= 0.21.
-
 Parallelization is achieved using OpenMP. This code should compile (although
 the Cython files may have issues) using a compiler that does not support OMP,
 e.g. clang.
