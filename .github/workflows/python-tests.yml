@@ -20,17 +20,17 @@ jobs:
       matrix:
         include:
 
-          - name: Python 3.10 with required dependencies
+          - name: Python 3.11 with required dependencies (and gcc 11.2)
             os: ubuntu-22.04  # gcc 11.2
-            python-version: "3.10"
-            toxenv: py310-test-numpy126
+            python-version: "3.11"
+            toxenv: py311-test-numpy126
 
           - name: Python 3.11 with required dependencies
             os: macos-latest
             python-version: "3.11"
             toxenv: py311-test-astropy60
 
-          - name: Python 3.12 with required dependencies
+          - name: Python 3.12 with required dependencies (and gcc 13.2)
             os: ubuntu-24.04  # gcc 13.2
             python-version: "3.12"
             toxenv: py312-test-astropy70
@@ -80,6 +80,8 @@ jobs:
     needs: tests
     uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish.yml@d9b81a07e789d1b1921ab5fe33de2ddcbbd02c3f  # v2.3.0
     with:
+      env: |
+        EXTENSION_HELPERS_PY_LIMITED_API: 'cp311'
       test_extras: test
       test_command: pytest -p no:warnings --pyargs astroscrappy
       targets: |

@@ -1,6 +1,5 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 # cython: boundscheck=False, nonecheck=False, wraparound=False, language_level=3, cdivision=True
-# distutils: define_macros=NPY_NO_DEPRECATED_API=NPY_1_7_API_VERSION
 """
 Name : median_utils
 Author : Curtis McCully
