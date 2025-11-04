@@ -27,7 +27,8 @@ I have ported all of the slow functions to Cython/C, and optimized
 where I can. This is designed to be as fast as possible so some of the
 readability has been sacrificed, specifically in the C code.
 
-If you use this code, please cite the Zendo DOI: https://zenodo.org/record/1482019
+If you use this code, please cite the Zendo DOI:
+https://doi.org/10.5281/zenodo.1482018
 
 Please cite the original paper which can be found at:
 http://www.astro.yale.edu/dokkum/lacosmic/
