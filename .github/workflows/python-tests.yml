@@ -52,7 +52,7 @@ jobs:
             toxenv: codestyle
 
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+    - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
       with:
         fetch-depth: 0
     - name: Set up Python ${{ matrix.python-version }}
@@ -78,7 +78,7 @@ jobs:
 
   publish:
     needs: tests
-    uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish.yml@99401c364fa51c9c507d3cd6d272049278ac0b2c  # v2.4.0
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish.yml@4193751d511425d4edc1d5657c24b2128d49b017  # v2.6.4
     with:
       env: |
         EXTENSION_HELPERS_PY_LIMITED_API: 'cp311'
